@@ -1,0 +1,35 @@
+/* Requested reference adjustments, scoped to the brand and library. */
+.site-header .brand7 {display:flex;align-items:center;flex-shrink:0;line-height:0}
+.site-header .brand7 .drc-logo24 {display:block;width:clamp(253px,16.33vw,356.5px);height:auto;aspect-ratio:1710 / 210;background:transparent}
+.site-header .library-toolbar7 {position:static;height:auto;padding:0;margin:0 auto 0 38px;border:0;background:transparent!important;backdrop-filter:none;gap:14px}
+.site-header .library-toolbar7 button {display:grid;place-items:center;width:44px;height:44px;padding:8px;border:1px solid transparent;border-radius:7px;background:transparent;color:#454545}
+.site-header .library-toolbar7 button.active {border-color:#bdbdbd}
+.site-header .library-toolbar7 svg {display:block;width:28px;height:28px}
+body.library-reference23 .site-header::after {content:'';position:absolute;bottom:0;left:3.1%;right:3.1%;height:1px;background:#ddd}
+body.library-reference23 .library7 {padding:0 3.1%;min-height:0}
+body.library-reference23 .orbit8 {height:calc(100svh - 108px);min-height:600px}
+body.library-reference23 .orbit8 .orbit-card8 {--mm12:clamp(1.05px,.17vh,1.9px);--run12:clamp(110px,10.7vw,212px);left:43%;top:61%;transform:translate3d(calc(-50% + var(--offset8)*var(--run12)),calc(-50% - var(--offset8)*9.2vh),0)}
+body.library-reference23 .year-wheel8 {top:52%;left:calc(-335px + 6.5vw)}
+body.library-reference23 #orbit-info8 {right:1%;bottom:5%;width:240px}
+body.library-reference23 .orbit-controls8 {left:30%;right:25%;bottom:3%}
+@media(min-width:1600px){body.library-reference23 #orbit-info8{width:280px}}
+@media(max-width:800px){
+ .site-header .brand7 .drc-logo24{width:207px}
+ .site-header .library-toolbar7{margin-left:18px;gap:4px}
+ .site-header .library-toolbar7 button{width:32px;height:36px;padding:5px}
+ .site-header nav{gap:18px}
+ .site-header .search-trigger7{width:80px}
+}
+@media(max-width:600px){
+ body.library-reference23 .site-header{flex-wrap:wrap;height:130px!important;justify-content:space-between}
+ .site-header .brand7 .drc-logo24{width:195.5px}
+ .site-header .library-toolbar7{margin:0}
+ body.library-reference23 .site-header nav{width:100%;justify-content:flex-end}
+ body.library-reference23 .orbit8{height:calc(100svh - 130px)}
+ body.library-reference23 .orbit8 .orbit-card8{--run12:100px;--mm12:1.05px;left:43%}
+}
+
+/* Stable entry text: no white overlay or delayed text reveal. */
+body.detail-mode9,body.detail-mode9 .site-header{animation:none!important}
+.detail7::before{display:none!important}
+.detail-meta7.reveal7,.detail-text7 .reveal7{opacity:1!important;transform:none!important;transition:none!important}
