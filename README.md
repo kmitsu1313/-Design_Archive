@@ -2,28 +2,7 @@
 
 华东师范大学 2026 学年第一学期项目实践课。我们把球形馆藏和文献资料库整合成一个可交互的设计档案网站。读者可以从一本书的封面进入分类，再转到资料库查阅文献。
 
-## 本地预览
-
-在 GitHub 的 **Code → Download ZIP** 下载当前分支并解压，或使用 GitHub Desktop 克隆仓库并切换到要预览的分支。打开最外层的 `index.html` 即可进入球形馆藏。
-
-如果浏览器限制本地文件加载，可在包含该入口的目录中用 Python 3 启动静态服务器：
-
-```sh
-python -m http.server 8000 --bind 127.0.0.1
-```
-
-打开 [本地首页](http://127.0.0.1:8000/)，点击一本书进入分类，再点右侧箭头进入资料库。点击资料库搜索栏右侧的行星图标可以返回球形馆藏。单独检查资料库时，可以打开 [资料库预览入口](http://127.0.0.1:8000/?view=library)。
-
-## 从哪里开始改
-
-网站使用 HTML、CSS 和 JavaScript，图片和字体随项目提供。
-
-| 想修改的内容 | 对应位置 |
-| --- | --- |
-| 两个页面之间的切换、加载和返回 | 根目录的 `index.html` 和 `portal.js` |
-| 球形馆藏的书封、分类交互和搜索 | `sphere/`，从 `sphere/index.html` 查看当前页面用到的文件 |
-| 资料库首页、书籍详情和专题 | `library/`，从 `library/index.html` 查看当前加载的脚本和样式 |
-| 红旗专题的章节内容与配图 | `library/hongqi-revised/` |
+[打开网站 · 在线预览](https://kmitsu1313.github.io/-Design_Archive/)
 
 ## 后续协作分工
 
@@ -34,11 +13,27 @@ python -m http.server 8000 --bind 127.0.0.1
 3. **网页修改**。陆毅和张帅航一起修改现有网页。
 4. **展览交互装置**。何逸凡负责研究球形交互装置，供展览使用。
 
-### 从认领到合并
+## 我们怎么用 GitHub 协作
 
-1. 在 [Issues](https://github.com/kmitsu1313/-Design_Archive/issues) 认领或新建一个任务，说明准备改哪部分、怎样算完成。多人会改同一文件时，先在 Issue 里协调。
-2. 首次整合在 `merge-ab` 上审核。整合合入 `main` 后，在 GitHub Desktop 切到 `main`，点击 **Fetch origin / Pull origin** 同步，再从它新建个人分支，例如 `feature/book-sources`。
-3. 完成一个小改动后，本地预览受影响的页面，再提交并推送。提交说明可写成 `feat: 补充书目来源`、`fix: 修复返回入口` 或 `docs: 更新预览说明`。
-4. 向 `main` 发起 Pull Request，关联 Issue，说明改了什么、如何验证。涉及视觉变化时附截图，请一位同学按步骤复核后再合并。
+`main` 是线上网站使用的主分支。我们每做一项任务，就开一个分支，让 Agent 在里面改。预览满意后，再把改动合回 `main`。
 
-使用 AI 辅助修改时，每次聚焦一个任务，提交前由本人预览。密钥和本地环境配置请留在自己的电脑上。
+**第一次加入。** 安装 [GitHub Desktop](https://desktop.github.com/) 并登录自己的 GitHub 账号。打开[项目仓库](https://github.com/kmitsu1313/-Design_Archive)，点 **Code → Open with GitHub Desktop → Clone**。记住保存位置，之后用 Agent 打开这个文件夹。如果还没有写入权限，请仓库负责人把你的 GitHub 账号加为协作者。
+
+### 1. 创建自己的分支，或接着同学的分支做
+
+- **开始新任务**：在 Desktop 顶部点 **Current Branch → main**，再点 **Fetch origin** 检查更新。如果出现 **Pull origin**，点它把最新版拉到电脑。接着点 **Current Branch → New Branch**，起一个容易辨认的名字，例如 `mobile-layout`，从 `main` 创建。点 **Publish branch**，其他同学就能找到它。
+- **接手已有任务**：请同学先推送改动，把分支名发给你。点 **Fetch origin**，在 **Current Branch** 中搜索并选中那个分支；如果出现 **Pull origin**，再点一下。顶部显示同学发来的分支名，就可以让 Agent 接着做了。
+
+### 2. 让 Agent 修改，自己看效果
+
+用 Agent 打开刚才克隆的文件夹，告诉它要改哪个页面，以及你希望看到什么。比如做手机端时，可以直接发：
+
+> 请确认当前分支是 mobile-layout。帮我调整资料库首页，让搜索框在手机竖屏时完整显示。改好后请启动本地预览，把地址和检查方法发给我。
+
+确认效果后，回到 Desktop，在左下角 **Summary** 用一句中文写明改动，例如“调整手机端搜索框宽度”。点 **Commit to 当前分支名** 把改动保存在本机，再点 **Push origin** 上传到 GitHub。
+
+### 3. 合并到主分支，让大家看到新版
+
+1. 打开仓库的 **Pull requests → New pull request**。把 **base** 选为 `main`，**compare** 选为自己的分支，点 **Create pull request**。标题写清改了什么，页面调整可以附一张预览截图。
+2. 请一位同学看过改动，由有权限的成员点 **Merge pull request → Confirm merge**。GitHub Pages 发布完成后，打开上方的在线预览就能看到新版。
+3. 下次开工前，在 Desktop 切回 `main`，点 **Fetch origin**，有更新就点 **Pull origin**，再为下一项任务创建分支。
