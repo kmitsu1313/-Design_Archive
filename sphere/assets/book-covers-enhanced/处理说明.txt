@@ -1,0 +1,5 @@
+13 张低分辨率封面（06—18）使用内置 ImageGen 逐张清晰化；01—05 保留现有较高清原图。
+清晰化图仅用于空间浏览展示，详情与原图链接保留原始扫描。
+AI 对低分辨率文字、图案存在重建和偏差，不能作为文献内容的忠实复刻。
+提示词：Faithfully restore and upscale this exact book cover image for a scholarly archive. Remove blur and JPEG noise, sharpen printed lettering and artwork with high resolution. Preserve all original Chinese/English text, colors, design, exact perspective and silhouette. Do not redesign, rewrite or invent details. Keep original aspect ratio and framing so existing percentage-based cutout polygon will align perfectly. White background, no added shadows or decorations.
+16、17 提示词采用同义版本：Restore and upscale this exact book-cover photograph for a research archive website. Increase resolution and edge clarity, remove JPEG artifacts and blur. Preserve original composition, perspective, book silhouette, color and every visible Chinese text. Do not redesign or invent text/details. Keep the exact same framing and aspect ratio, plain white background. Output one faithful high-resolution restored image.

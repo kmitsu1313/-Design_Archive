@@ -1,0 +1,6 @@
+追加修改：
+- 左上角 DRC 标识在各尺寸断点统一放大 15%。
+- 改用透明标识遮罩，移除原始图片白色矩形背景。
+- 标识通过 currentColor 跟随原页面文字颜色，书本介绍页的深浅主题继续使用原有配色。
+- 本次只修改 reference-revision.css、reference-revision.js，新增 assets/drc-logo-mask.svg；书本、书库布局及其他文件未修改。
+验证：JavaScript 语法检查通过；遮罩文件结构及引用检查通过。未进行浏览器实际渲染验证。
