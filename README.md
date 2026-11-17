@@ -2,7 +2,17 @@
 
 华东师范大学 2026 学年第一学期项目实践课。我们把球形馆藏和文献资料库整合成一个可交互的设计档案网站。读者可以从一本书的封面进入分类，再转到资料库查阅文献。
 
-[打开网站 · 在线预览](https://kmitsu1313.github.io/-Design_Archive/)
+[打开正式网站](https://kmitsu1313.github.io/-Design_Archive/) · [打开分支预览大厅](https://kmitsu1313.github.io/Design_Archive-preview/)
+
+## 正式网站与分支预览
+
+正式网站由 GitHub Pages 从本仓库的 `main` 分支根目录发布。PR 合并到 `main` 后，等待 Pages 发布完成并刷新，即可看到新版；只推送到开发分支不会改变正式网站。
+
+未合并的改动可以在[分支预览大厅](https://kmitsu1313.github.io/Design_Archive-preview/)查看。选择分支后可浏览该版本的完整网站，也可点“独立打开”分享链接。每个人的选择互不影响，不会合并或修改代码。
+
+预览由独立的 [Design_Archive-preview 仓库](https://github.com/kmitsu1313/Design_Archive-preview)自动生成，约每 30 分钟检查本仓库的全部远程分支，定时任务可能延迟。上课前如需立即更新，可到[预览仓库 Actions](https://github.com/kmitsu1313/Design_Archive-preview/actions/workflows/preview.yml)，点击 **Run workflow**。修改必须先推送到 GitHub，尚在本机的内容不会出现在预览站。
+
+`main` 已启用保护规则：必须通过 PR 合入，禁止删除或强制推送，不强制要求审批。大家先提交 PR、查看预览，再由负责人统一检查和合并。预览站的发布不代表 PR 已合并。
 
 ## 后续协作分工
 
