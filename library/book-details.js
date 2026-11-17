@@ -35,6 +35,9 @@ details7 = function(book) {
     if(book.id==='wendao')html=html.replace(/截图中的读者评论将本书视作/g,'本书可视作').replace(/此处为读者观点摘要，不作为作者自述。/g,'').replace('读者观点 · 摘要','书本简评');
   }
   if(!record) html=html.replace(/(<span>书本简评<\/span><div class="copy22">)([\s\S]*?)(<\/div>)/,(_,start,copy,end)=>start+'<div class="reader-entry">'+avatar()+'<div>'+copy+'</div></div>'+end);
+  if (book.id === 'wendao') {
+    html = html.replace('</aside>', '<a class="case-link7" href="wendao/index.html">进入问道 · 图像叙事<span>↗</span></a></aside>');
+  }
   return html;
 };
 

@@ -1,0 +1,33 @@
+(()=>{
+const y=document.createElement('span');y.id='current-year';y.textContent='手艺';document.querySelector('#timeline').append(y);
+const names=window.STORY_DATA.chapters.map(chapter=>chapter.name);
+const cover=document.querySelector('#chapter-cover')||document.createElement('nav');cover.replaceChildren();cover.id='chapter-cover';cover.setAttribute('aria-label','选择阅读主题');
+const photos=['workshop','turtle','friendship','teacher','classroom'];
+names.forEach((name,i)=>{const b=document.createElement('button');b.className='chapter-strip';b.style.setProperty('--i',i);b.setAttribute('aria-label',name);const im=document.createElement('img');im.src=window.STORY_DATA.assets[photos[i]].src;im.alt=window.STORY_DATA.assets[photos[i]].caption;const label=document.createElement('span');label.textContent=name;b.append(im,label);b.onclick=async()=>{if(i!==2){window.wendaoChapter(i+1);return}if(cover.dataset.entering)return;cover.dataset.entering='true';try{
+const reduced=matchMedia('(prefers-reduced-motion:reduce)').matches;
+const wait=ms=>new Promise(resolve=>setTimeout(resolve,reduced?0:ms));
+cover.classList.add('text-leaving19');
+await window.wendaoReady;
+window.wendaoEnter();
+await wait(120);
+cover.classList.add('leaving');
+await wait(680);
+document.body.classList.add('image-enter19');
+document.body.classList.remove('in-directory');
+cover.hidden=true;
+const pictures=document.querySelector('#pictures');
+const imageAnimation=reduced?null:pictures.animate([{translate:'0 65vh',opacity:0},{translate:'0 0',opacity:1}],{duration:700,easing:'cubic-bezier(.22,1,.36,1)',fill:'both'});
+const ui=[...document.querySelectorAll('#copy,#date,#bottom,#nodes,#chapters,#start-hint')];
+const fades=reduced?[]:ui.map(el=>el.animate([{opacity:0},{opacity:1}],{duration:520,delay:90,easing:'ease-out',fill:'both'}));
+document.body.classList.remove('image-enter19');
+await Promise.all([...fades,imageAnimation].filter(Boolean).map(a=>a.finished));
+[...fades,imageAnimation].filter(Boolean).forEach(a=>a.cancel());
+delete cover.dataset.entering;
+}catch(error){delete cover.dataset.entering;console.error(error)}};cover.append(b)});
+const heading=document.createElement('header');heading.className='directory-heading13';heading.innerHTML='<h1>问道中国自主设计</h1><p>沈榆 · 上海人民美术出版社 · 手艺与协作</p>';cover.append(heading);
+const hint=document.createElement('aside');hint.className='directory-hint13';hint.setAttribute('aria-live','polite');cover.append(hint);
+const summaries=window.STORY_DATA.chapters.map(chapter=>chapter.summary);
+cover.querySelectorAll('.chapter-strip').forEach((b,i)=>{b.onmouseenter=b.onfocus=()=>{hint.innerHTML='<h2>'+names[i]+'</h2><p>'+summaries[i]+'</p>';hint.classList.add('visible');};b.onmouseleave=b.onblur=()=>hint.classList.remove('visible');});document.body.append(cover);document.documentElement.classList.remove('story-boot');document.body.classList.add('in-directory');window.scrollTo({top:0,behavior:'instant'});
+const back=document.createElement('button');back.id='directory-return';back.textContent='阅读目录';back.onclick=()=>{cover.hidden=false;cover.classList.remove('leaving','text-leaving19');document.body.classList.add('in-directory');};document.body.append(back);
+window.wendaoStart=()=>cover.querySelectorAll('.chapter-strip')[2].click();
+})();
