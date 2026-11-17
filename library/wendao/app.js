@@ -36,7 +36,8 @@ function parse(raw) {
  const g=el('g',{opacity:0,'data-scene':raw.id},$('#copy')),groups=[];
  for(const n of root.querySelectorAll('text')) {
   if(raw.dark)n.setAttribute('fill','#e1e1de');
-  if(+n.getAttribute('font-size')===32)n.classList.add('section-heading');
+  const size=+n.getAttribute('font-size');
+  n.classList.add(size===32?'section-heading':size<=13?'source-note':'body-copy');
   const x=+n.getAttribute('x'),y=+n.getAttribute('y');
   let block=groups.find(b=>b.x===x&&y>=b.last&&y-b.last<70);
   if(!block){block={x,last:y,node:el('g',{},g)};groups.push(block)}

@@ -49,8 +49,8 @@ window.STORY_DATA = {
       "caption": "毛关福《王杰》 / 资料 p.123"
     },
     "river": {
-      "w": 600,
-      "h": 450,
+      "w": 450,
+      "h": 600,
       "src": "assets/river.jpg",
       "caption": "《鸭绿江畔》 / 资料 p.125"
     },
@@ -162,7 +162,7 @@ window.STORY_DATA = {
     {
       "id": "s11",
       "label": "从课堂走向创作",
-      "body": "<text x=\"720\" y=\"170\" font-size=\"32\" fill=\"#944b35\">从课堂走向创作</text><text x=\"1120\" y=\"330\" font-size=\"23\" fill=\"#696b66\">师生走出校门体验生活，再把观察与制作连接起来。</text><text x=\"1120\" y=\"369\" font-size=\"23\" fill=\"#696b66\">《鸭绿江畔》作为集体创作的作品，让课堂训练进</text><text x=\"1120\" y=\"408\" font-size=\"23\" fill=\"#696b66\">入具体的情境与形象塑造。</text><use href=\"#river\" x=\"80\" y=\"285\" width=\"866.6666666666666\" height=\"650\"/><text x=\"1120\" y=\"1000\" font-size=\"13\" fill=\"#696b66\">《问道中国自主设计》 · 资料 p.125–128</text>",
+      "body": "<text x=\"720\" y=\"170\" font-size=\"32\" fill=\"#944b35\">从课堂走向创作</text><text x=\"1120\" y=\"330\" font-size=\"23\" fill=\"#696b66\">师生走出校门体验生活，再把观察与制作连接起来。</text><text x=\"1120\" y=\"369\" font-size=\"23\" fill=\"#696b66\">《鸭绿江畔》作为集体创作的作品，让课堂训练进</text><text x=\"1120\" y=\"408\" font-size=\"23\" fill=\"#696b66\">入具体的情境与形象塑造。</text><use href=\"#river\" x=\"270\" y=\"260\" width=\"487.5\" height=\"650\"/><text x=\"1120\" y=\"1000\" font-size=\"13\" fill=\"#696b66\">《问道中国自主设计》 · 资料 p.125–128</text>",
       "year": "实践",
       "dark": false,
       "focus": null
