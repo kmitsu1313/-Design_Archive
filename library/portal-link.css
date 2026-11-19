@@ -24,3 +24,7 @@ body.library-reference23 .orbit-controls8{left:0;right:0;bottom:14px;gap:44px}
 
 /* 手机端书架：压缩书架上方留白，书上移 */
 @media(max-width:600px){.shelf9 .shelf-space7{height:52svh;min-height:380px}.shelf9 .shelf-item7{bottom:20%!important}}
+
+/* 全站隐藏滚动条：保留滚动能力，仅隐藏滚动条视觉，避免破坏排版 */
+html{scrollbar-width:none}
+::-webkit-scrollbar{width:0!important;height:0!important}

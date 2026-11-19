@@ -124,3 +124,7 @@ body:before{opacity:.27}
 .hqm-focuswrap>img{filter:brightness(.45)}
 .hqm-focuswrap .hqm-bright,.hqm-box{opacity:1}
 }
+
+/* 全站隐藏滚动条：保留滚动能力，仅隐藏滚动条视觉，避免破坏排版 */
+html{scrollbar-width:none}
+::-webkit-scrollbar{width:0!important;height:0!important}
