@@ -1,0 +1,28 @@
+name: 资料补充与内容纠错
+description: 补充书籍资料、图片来源，或更正文字、图注及目录信息。
+title: "[资料] "
+body:
+  - type: input
+    id: location
+    attributes:
+      label: 对应哪本书或哪个页面？
+      placeholder: 书名、页面链接、阅读场景或图注位置。
+    validations:
+      required: true
+  - type: textarea
+    id: change
+    attributes:
+      label: 需要补充或更正什么？
+      placeholder: 请区分当前内容和建议内容；尚未核实的部分请明确说明。
+    validations:
+      required: true
+  - type: textarea
+    id: source
+    attributes:
+      label: 依据与资料来源
+      description: 尽量附原书页码、链接或截图。资料在群里或本地时，写清文件名和页码，方便接手的人找到。
+  - type: textarea
+    id: notes
+    attributes:
+      label: 补充说明
+      placeholder: 例如：建议替换哪张图片；只改图注还是需要同步调整排版。

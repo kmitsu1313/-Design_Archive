@@ -1,0 +1,44 @@
+name: 新功能
+description: 提出新的功能，或改进现有的使用流程。
+title: "[功能] "
+body:
+  - type: markdown
+    attributes:
+      value: 先说明谁会用、希望完成什么。不需要写技术方案，后续可以一起讨论或交给 Agent 实现。
+  - type: textarea
+    id: need
+    attributes:
+      label: 想解决什么问题？
+      placeholder: 例如：课堂展示时，我需要快速找到某一本书，现在只能逐本翻。
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: 希望增加什么功能？
+      placeholder: 描述用户从哪里进入、做什么操作、最后看到什么。
+    validations:
+      required: true
+  - type: input
+    id: location
+    attributes:
+      label: 涉及哪个页面或环节？
+      placeholder: 例如：球形馆藏、书库、问道专题、手机端、分支预览大厅
+  - type: textarea
+    id: done
+    attributes:
+      label: 怎样算完成？
+      description: 写出几条可以直接检查的结果，方便同学或 Agent 接手。
+      placeholder: |
+        - 输入书名能找到对应图书。
+        - 点击结果能进入图书介绍。
+  - type: textarea
+    id: scope
+    attributes:
+      label: 优先级、时间或范围
+      placeholder: 例如：课堂展示前需要；先做电脑端；某些细节可以后续再做。
+  - type: textarea
+    id: references
+    attributes:
+      label: 参考、草图或相关 Issue
+      description: 可以贴链接、拖入截图，或用 #编号 关联已有讨论。

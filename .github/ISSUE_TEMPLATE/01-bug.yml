@@ -1,0 +1,63 @@
+name: Bug 报告
+description: 页面打不开、点不动、显示异常，或不同设备上的表现不一致。
+title: "[Bug] "
+body:
+  - type: markdown
+    attributes:
+      value: 请用日常语言描述问题，不需要知道原因或会写代码。不确定的内容可以写“不清楚”；截图可直接拖进文字框。
+  - type: textarea
+    id: problem
+    attributes:
+      label: 遇到了什么问题？
+      placeholder: 例如：进入动画播放完后，点击图书没有反应。
+    validations:
+      required: true
+  - type: input
+    id: page
+    attributes:
+      label: 页面地址或位置
+      description: 尽量粘贴出问题时的完整网址；本地页面可以写页面名称。
+      placeholder: 例如：分支预览大厅 → 问道分支 → 图书首页
+    validations:
+      required: true
+  - type: dropdown
+    id: entry
+    attributes:
+      label: 从哪里打开？
+      options:
+        - 正式网站（main）
+        - 分支预览大厅内
+        - 预览站的“独立打开”页面
+        - 本地预览
+        - 不清楚 / 其他
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: 怎样遇到这个问题？
+      placeholder: |
+        1. 打开……
+        2. 点击 / 滚动……
+        3. 出现……
+        偶尔发生、无法稳定重现也可以说明。
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: 你原本希望发生什么？
+      placeholder: 例如：点击书封后进入该书的介绍页面。
+  - type: input
+    id: environment
+    attributes:
+      label: 设备、系统和浏览器
+      description: 浏览器名称很重要，知道版本号的话也请附上；不清楚版本可不填。
+      placeholder: 例如：MacBook / macOS / Safari；Windows / Chrome；iPhone / Safari
+    validations:
+      required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: 截图、录屏或补充信息
+      description: 可附预览分支名、提交号、报错；也可以说明换浏览器或独立打开后是否正常。
