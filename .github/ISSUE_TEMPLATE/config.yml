@@ -1,0 +1,5 @@
+blank_issues_enabled: true
+contact_links:
+  - name: 分支预览大厅
+    url: https://kmitsu1313.github.io/Design_Archive-preview/
+    about: 提交反馈前可选择对应分支，查看实际网页效果。

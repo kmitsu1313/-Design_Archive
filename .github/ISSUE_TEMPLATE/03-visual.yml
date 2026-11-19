@@ -1,0 +1,49 @@
+name: 视觉想法
+description: 讨论字体、版式、配色、图像呈现或动效方向。
+title: "[视觉] "
+body:
+  - type: markdown
+    attributes:
+      value: 不必先做完整设计稿。可以从一张参考图、一个局部问题或一句风格描述开始；请区分参考中的哪些部分值得借鉴。
+  - type: input
+    id: location
+    attributes:
+      label: 想调整哪里？
+      placeholder: 页面名称 / 网址 / 分支，以及具体区域。
+    validations:
+      required: true
+  - type: textarea
+    id: direction
+    attributes:
+      label: 你的视觉想法
+      placeholder: 例如：问道标题使用有印刷质感的宋体，正文更克制，图注保持清晰。
+    validations:
+      required: true
+  - type: dropdown
+    id: aspects
+    attributes:
+      label: 主要涉及哪些方面？
+      multiple: true
+      options:
+        - 字体与文字层级
+        - 版式、留白与阅读节奏
+        - 配色与材质
+        - 图片选择、裁切与呈现
+        - 动效与交互反馈
+        - 手机端视觉
+        - 整体风格 / 其他
+  - type: textarea
+    id: references
+    attributes:
+      label: 参考图片、链接或草图
+      description: 可直接拖入图片，并说明想借鉴字体、构图、色彩还是动效。没有参考也可以先讨论。
+  - type: textarea
+    id: preserve
+    attributes:
+      label: 需要保留或避免的内容
+      placeholder: 例如：保留原书图片方向；不要改变现有滚动逻辑；图注必须易读。
+  - type: textarea
+    id: first-step
+    attributes:
+      label: 建议先尝试什么？
+      placeholder: 例如：先改一个阅读场景，大家确认后再应用到其他场景。
