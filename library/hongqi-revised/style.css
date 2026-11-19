@@ -90,3 +90,37 @@ body:before{opacity:.27}
 @media(max-width:760px) and (prefers-reduced-motion:reduce){
 .hqm-float{opacity:1;transform:none;transition:none}
 }
+
+/* 手机端叙事增强：排版随下滑变换 + 方框聚焦细节对比（还原桌面端体验） */
+@media(max-width:760px){
+/* 跨页绘图幕（08）：奶油底色，宽图随下滑横向平移浏览 */
+.hqm-scene.hqm-spread{background:#e8dbb2;margin-left:-7%;margin-right:-7%;padding-left:7%;padding-right:7%}
+.hqm-spread figure{background:transparent;padding:0;box-shadow:none}
+.hqm-panfig{overflow:hidden}
+.hqm-panfig img{width:185%!important;max-width:none;height:auto}
+.hqm-panfig figcaption{padding-top:8px}
+/* 暗色聚焦幕（09A/09B）：深色底、浅色文字，对应桌面端的深色场景 */
+.hqm-scene.hqm-dark{background:#242626;color:#d8d6d1;margin-left:-7%;margin-right:-7%;padding-left:7%;padding-right:7%}
+.hqm-dark h2{color:#e1e1de!important}
+.hqm-dark>p{color:#b9b7b2!important}
+.hqm-dark .hqm-kicker{color:#e0694f}
+.hqm-dark .hqm-year{color:#cd4933;opacity:.22}
+.hqm-dark figure{background:transparent;padding:0;box-shadow:none}
+.hqm-dark figcaption{color:#8f8d88}
+/* 方框聚焦：图越靠近视口中心越暗化，细节区域保持明亮并描框（--reveal 由滚动驱动） */
+.hqm-focuswrap{position:relative;overflow:hidden}
+.hqm-focuswrap img{display:block;width:100%;height:auto}
+.hqm-focuswrap>img{filter:brightness(calc(1 - var(--reveal,0)*.55))}
+.hqm-focuswrap .hqm-bright{position:absolute;inset:0;clip-path:inset(var(--fy) calc(100% - var(--fx) - var(--fw)) calc(100% - var(--fy) - var(--fh)) var(--fx));opacity:var(--reveal,0)}
+.hqm-box{position:absolute;left:var(--fx);top:var(--fy);width:var(--fw);height:var(--fh);border:1.5px solid #cd4933;opacity:var(--reveal,0);box-shadow:0 0 0 1px rgba(255,255,255,.28);transform:scale(calc(1 + (1 - var(--reveal,0))*.05));transform-origin:center;pointer-events:none}
+/* 多图幕：左右错落排版，随下滑逐张切换构图 */
+.hqm-fig--left{width:82%;margin-left:0!important;margin-right:auto!important}
+.hqm-fig--right{width:82%;margin-left:auto!important;margin-right:0!important}
+/* 引语幕（11）：红字大排版，灰字收尾 */
+.hqm-scene.hqm-quote>p{font-size:16px!important;color:#c8462c!important;font-weight:500;line-height:1.85}
+.hqm-scene.hqm-quote>p.hqm-note{color:#8c877f!important;font-weight:400;font-size:13.5px!important}
+}
+@media(max-width:760px) and (prefers-reduced-motion:reduce){
+.hqm-focuswrap>img{filter:brightness(.45)}
+.hqm-focuswrap .hqm-bright,.hqm-box{opacity:1}
+}
