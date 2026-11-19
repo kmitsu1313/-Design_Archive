@@ -8,3 +8,16 @@
 .tile.paper-stack::before{content:"";position:absolute;inset:2px -5px -4px 3px;border:1px solid #d4d1c9;background:#fdfcf9;transform:rotate(2.4deg);z-index:-1;box-shadow:0 2px 3px #00000008}
 .paperclip{position:absolute;left:9%;top:-4%;width:5%;height:17%;border:1.5px solid #8d8b82;border-radius:12px;transform:rotate(-8deg);z-index:3;box-shadow:1px 1px 1px #0002;pointer-events:none}
 .paperclip::after{content:"";position:absolute;inset:12% 25% 7%;border:1px solid #a4a198;border-top:0;border-radius:0 0 8px 8px}
+
+body.drc-device-page dialog#detail{position:fixed;inset:0;margin:0;width:100vw;height:100dvh;max-width:none;max-height:none;padding:65px;border:0;border-radius:0;background:#fffffff5;box-shadow:none;backdrop-filter:none;-webkit-backdrop-filter:none;color:#222;overflow:auto}
+body.drc-device-page dialog#detail[open]{display:grid;grid-template-columns:60vw 45vw;gap:5vw;align-items:center;animation:detail-in .55s cubic-bezier(.22,1,.36,1)}
+body.drc-device-page #detailMedia{height:110vh;position:relative}
+body.drc-device-page #detailMedia img{width:100%;height:100%;object-fit:contain}
+body.drc-device-page #detail article{max-width:none;min-height:110vh;display:flex;flex-direction:column;justify-content:center}
+body.drc-device-page #detailType{font-size:12px;line-height:1.5;letter-spacing:.15em;color:#999}
+body.drc-device-page #detail h1{font-size:25px;font-weight:500;line-height:1.6;margin:20px 0}
+body.drc-device-page #detailCopy{max-width:620px;font-size:14px;line-height:2;color:#666}
+body.drc-device-page #detail #close{position:fixed;right:30px;top:24px;width:auto;height:auto;padding:0;border:0;background:none;color:#222;font-size:32px;line-height:1}
+body.drc-device-page #detail #original{margin-top:25px;font-size:0;color:#555}
+body.drc-device-page #detail #original::after{content:"↗";font-size:24px}
+@media(max-width:650px){body.drc-device-page dialog#detail{padding:60px 25px 25px}body.drc-device-page dialog#detail[open]{grid-template-columns:85vw 85vw;gap:15vw}body.drc-device-page #detailMedia{height:90vh}body.drc-device-page #detail article{min-height:90vh}body.drc-device-page #detail h1{font-size:21px}body.drc-device-page #detail #close{right:15px;top:15px}}
