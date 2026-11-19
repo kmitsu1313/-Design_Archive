@@ -10,3 +10,17 @@
   .site-header .search-trigger7 svg{width:20px;height:20px}
   .site-header nav .sphere-return{flex-basis:24px;width:24px;height:28px;margin-left:0}
 }
+/* 手机端书架：书与间距同按屏高计算，任何机型都不重叠，一屏正好露出 3 本 */
+@media(max-width:600px){:root{--step9:18.5svh}.shelf9 .shelf-item7{height:18svh!important}}
+
+/* 手机端书库年轮：书卡缩小上移，信息条与切换按钮上下分层、不再重叠 */
+@media(max-width:600px){
+body.library-reference23 .orbit8{min-height:0}
+body.library-reference23 .orbit8 .orbit-card8{--mm12:.78px;--run12:70px;left:45%;top:38%;transform:translate3d(calc(-50% + var(--offset8)*var(--run12)),calc(-50% - var(--offset8)*66px),0)!important}
+body.library-reference23 #orbit-info8{left:5%;right:5%;width:auto;bottom:78px;padding-top:12px}
+body.library-reference23 #orbit-info8 h3{font-size:14px;margin:8px 0}
+body.library-reference23 .orbit-controls8{left:0;right:0;bottom:14px;gap:44px}
+}
+
+/* 手机端书架：压缩书架上方留白，书上移 */
+@media(max-width:600px){.shelf9 .shelf-space7{height:52svh;min-height:380px}.shelf9 .shelf-item7{bottom:20%!important}}
