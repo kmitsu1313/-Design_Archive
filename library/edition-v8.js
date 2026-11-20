@@ -2,9 +2,9 @@
 const contexts8=new Set(),textures8=new Map();
 libraryMode7='timeline';
 libraryIndex7=2;
-function flat8(d){const [w,h]=dimensions7[d.cover];return `<svg class="flat8" viewBox="0 0 ${w*.9} ${h}" preserveAspectRatio="xMidYMid meet" role="img" aria-label="${esc(d.title)}"><svg width="${w*.9}" height="${h}" viewBox="${w*.1} 0 ${w*.9} ${h}" preserveAspectRatio="none" overflow="hidden"><image href="${asset7(d)}" width="${w}" height="${h}"/></svg></svg>`;}
+function flat8(d){return shelfFace(d);}
 volume7=function(d,shared=false){const [w,h]=dimensions7[d.cover];return `<span class="model8" style="--ratio8:${w*.9/h+.12};${shared?'view-transition-name:active-volume;':''}" role="img" aria-label="${esc(d.title)}，立体精装书"><canvas data-model8="${d.id}" aria-hidden="true"></canvas></span>`;};
-function texture8(url){if(!textures8.has(url))textures8.set(url,new Promise(resolve=>{const im=new Image();im.onload=()=>resolve(im);im.src=url}));return textures8.get(url);}
+function texture8(url){const cover=photoURLs.indexOf(url);if(cover!==-1)return shelfTexture(cover);if(!textures8.has(url))textures8.set(url,new Promise(resolve=>{const im=new Image();im.onload=()=>resolve(im);im.src=url}));return textures8.get(url);}
 function mesh8(canvas,d){const gl=canvas.getContext('webgl',{alpha:true,antialias:true,premultipliedAlpha:false});if(!gl)return;contexts8.add(gl);const r=canvas.getBoundingClientRect(),scale=Math.min(devicePixelRatio||1,2);canvas.width=Math.round(r.width*scale);canvas.height=Math.round(r.height*scale);gl.viewport(0,0,canvas.width,canvas.height);
  const vs=gl.createShader(gl.VERTEX_SHADER);gl.shaderSource(vs,'attribute vec4 p;attribute vec2 uv;attribute float light;varying vec2 t;varying float l;void main(){gl_Position=p;t=uv;l=light;}');gl.compileShader(vs);
  const fs=gl.createShader(gl.FRAGMENT_SHADER);gl.shaderSource(fs,'precision mediump float;uniform sampler2D tex;varying vec2 t;varying float l;void main(){vec4 c=texture2D(tex,t);gl_FragColor=vec4(c.rgb*l,c.a);}');gl.compileShader(fs);const program=gl.createProgram();gl.attachShader(program,vs);gl.attachShader(program,fs);gl.linkProgram(program);gl.useProgram(program);
@@ -39,8 +39,8 @@ function orbitCuboid8(book) {
  const {height,depth,estimated}=bookModelSize12(book);
  const split=[109/1140,100/1125,123/1184,86/1122,80/1110,92/1062,106/989,108/1163,106/1213,107/1215,115/1086,96/1024][book.cover], dims=dimensions7[book.cover], width=height*dims[0]*(1-split)/dims[1];
  const faces=["front","back","spine","pages","top","bottom"];
- return '<span class="orbit-cube12" role="img" aria-label="'+esc(book.title)+'" title="'+(estimated?'模型尺寸含估算':'书目尺寸')+' · '+width+' × '+height+' × '+depth+' mm" style="--front-size:'+(100/(1-split))+'%;--spine-size:'+(100/split)+'%;--width-mm12:'+width+';--height-mm12:'+height+';--depth-mm12:'+depth+';--cover12:url('+asset7(book)+')">'+
-  faces.map(face=>'<span class="orbit-face12 face12-'+face+'"></span>').join("")+'</span>';
+ return '<span class="orbit-cube12" role="img" aria-label="'+esc(book.title)+'" title="'+(estimated?'模型尺寸含估算':'书目尺寸')+' · '+width+' × '+height+' × '+depth+' mm" style="--front-size:'+(100/(1-split))+'%;--spine-size:'+(100/split)+'%;--width-mm12:'+width+';--height-mm12:'+height+';--depth-mm12:'+depth+'">'+
+  faces.map(face=>'<span class="orbit-face12 face12-'+face+'">'+(['front','back','spine'].includes(face)?shelfFace(book,face):'')+'</span>').join("")+'</span>';
 }
 function stepOrbit8(n){setOrbit8(libraryIndex7+n);}
 library7=function(){const q=query.trim().toLowerCase(),list=referenceBooks.filter(d=>`${d.title} ${d.author} ${d.en} ${d.year}`.toLowerCase().includes(q));const toolbar=`<header class="library-toolbar7">${[['timeline','╱','时间序列'],['grid','⊞','图像书库'],['list','☰','书目列表']].map(([m,s,a])=>`<button aria-label="${a}" class="${libraryMode7===m?'active':''}" onclick="libraryMode7='${m}';render7()">${s}</button>`).join('')}</header>`;if(!list.length)return `<section class="library7">${toolbar}<p class="library-empty7">没有找到相关图书。</p></section>`;
@@ -52,7 +52,7 @@ bind7=function(){bindBefore8();$$('#app canvas[data-model8]').forEach(c=>mesh8(c
 const renderBefore8=render7;
 render7=function(){for(const gl of contexts8)gl.getExtension('WEBGL_lose_context')?.loseContext();contexts8.clear();renderBefore8();};render=render7;
 // Book-spine sculpture: preserve the printed glyph proportions instead of stretching atlas slices.
-face7=function(d,spine=false){if(!spine)return flat8(d);const [w,h]=dimensions7[d.cover];return `<svg viewBox="0 0 ${w*.1} ${h}" preserveAspectRatio="xMidYMid meet" aria-hidden="true"><image href="${asset7(d)}" width="${w}" height="${h}"/></svg>`;};
+face7=function(d,spine=false){return shelfFace(d,spine?'spine':'front');};
 const centerBefore8=center7;
 center7=function(){let i=0;return centerBefore8().replace(/class="sculpture-book7 reveal7" style="/g,()=>{const [w,h]=dimensions7[i++];return `class="sculpture-book7 reveal7" style="--spine-ratio8:${w*.1/h};`;});};
 let resizeTimer8;window.addEventListener('resize',()=>{clearTimeout(resizeTimer8);resizeTimer8=setTimeout(()=>{if(document.body.classList.contains('custom7'))render7()},200)});

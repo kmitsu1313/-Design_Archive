@@ -18,7 +18,7 @@ referenceBooks.forEach((d,i)=>{const [author,year,publisher,subtitle,description
 collection.splice(0,collection.length,...referenceBooks);shelfBooks.splice(0,shelfBooks.length,...referenceBooks);
 let selected7=0,libraryMode7='grid',libraryIndex7=0,observer7;
 const dimensions7=atlasDimensions6.concat([[1086,1448]]);
-const asset7=d=>'assets/books/book-'+d.cover+'.png';
+const asset7=d=>current.split('?')[0]==='detail/'+d.id ? 'assets/books/book-'+d.cover+'.png' : photoURLs[d.cover];
 function face7(d,spine=false){const [w,h]=dimensions7[d.cover];return `<svg viewBox="${spine?0:w*.1} 0 ${w*(spine?.1:.9)} ${h}" preserveAspectRatio="none" aria-hidden="true"><image href="${asset7(d)}" width="${w}" height="${h}"/></svg>`;}
 function volume7(d,shared=false){const [w,h]=dimensions7[d.cover],ratio=w*.9/h;return `<span class="solid-book" role="img" aria-label="${esc(d.title)}" style="--ratio:${ratio};--depth:${d.cover===2?'34':'28'}px;--binding:${d.bg};${shared?'view-transition-name:active-volume;':''}"><span class="book-back7"></span><span class="book-pages7"></span><span class="book-top7"></span><span class="book-spine7">${face7(d,true)}</span><span class="book-front7">${face7(d)}</span></span>`;}
 book=d=>volume7(referenceBooks.find(x=>x.id===d.id)||referenceBooks[0]);
@@ -44,7 +44,3 @@ changeRoute=function(){const next=location.hash.slice(1)||'home';const update=()
 window.addEventListener('hashchange',changeRoute);
 $('footer').innerHTML='<div class="footer7"><span>ECNU & CDDC</span><span>中国近现代设计文献研究中心</span><span>DESIGN ARCHIVE / 2026</span></div>';
 current=location.hash.slice(1)||'home';render7();
-
-// Warm image decodes before following a book into another view.
-referenceBooks.forEach(d=>{const img=new Image();img.src=asset7(d);if(img.decode)img.decode().catch(()=>{});});
-

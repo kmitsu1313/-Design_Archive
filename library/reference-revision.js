@@ -18,9 +18,4 @@ bind7=function(){
  document.querySelector('.site-header .brand7').after(toolbar);
 };
 render7();
-const flatBefore23=flat8;
-flat8=function(d){
- if(d.id!=='science')return flatBefore23(d);
- return '<svg class="flat8" viewBox="0 0 883 1261" preserveAspectRatio="xMidYMid meet" role="img" aria-label="'+esc(d.title)+'"><image href="assets/books/science-front.png" width="883" height="1261"/></svg>';
-};
 render7();
