@@ -2,6 +2,10 @@
 const $=s=>document.querySelector(s),space=$('#space'),field=$('#field'),back=$('#back'),hint=$('#hint'),dialog=$('#detail');
 const labels={documents:'文献',images:'图片与物品',books:'图书'},data={documents:ResourceImageData.documents,images:[...new Map(ResourceImageData.images.map(x=>[x.image,x])).values()],books:BookCoverData};
 const introImages = [];
+function thumbnail(src) {
+ const filename = src.split('/').pop().replace(/\.[^.]+$/, '.webp');
+ return 'assets/thumbnails/' + filename;
+}
 const reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
 let mode='intro',selected=null,yaw=-.8,pitch=-.1,last=0,start=0,transition=0,from=0,to=0,mix=0,drag=null,moved=false,ready=false,entryFocus={x:0,y:0},portalLeaving=false;
 const items=[];for(let i=0;i<18;i++)for(const type of ['documents','books','images']){if(type==='documents'&&i>=6)continue;const asset=data[type][i%data[type].length];items.push({...asset,type,ordinal:i,duplicate:i>=data[type].length});}const sphereCount=items.length;for(const type of ['documents','books','images'])for(let i=0;i<(type==='documents'?18:36);i++)items.push({...data[type][i%data[type].length],type,ordinal:i,categoryExtra:true,title:data[type][i%data[type].length].title});let introIndex=0;items.forEach(x=>{x.introRank=!x.categoryExtra&&x.type!=='documents'&&introIndex<12?introIndex++:-1;});
