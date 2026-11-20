@@ -1,0 +1,9 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>移动资料库</title>
+<script>
+  const library = new URL('../library/', location.href);
+  library.search = location.search;
+  library.searchParams.set('layout', 'mobile');
+  library.hash = location.hash;
+  location.replace(library);
+</script></head><body><a href="../library/?layout=mobile">打开移动资料库</a></body></html>
