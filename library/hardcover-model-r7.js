@@ -112,6 +112,21 @@ mesh8=function(canvas,d){
    if(f.light<1){ctx.fillStyle=`rgba(0,0,0,${1-f.light})`;path(f.p.map(project));ctx.fill();}
    ctx.restore();
   }
+  if(canvas.closest('.shelf-item7')){
+   let light=canvas.parentElement.querySelector('.book-edge-light');
+   if(!light){
+    light=document.createElement('canvas');
+    light.className='book-edge-light';
+    light.setAttribute('aria-hidden','true');
+    canvas.after(light);
+   }
+   light.width=canvas.width;light.height=canvas.height;
+   const mask=light.getContext('2d');
+   mask.drawImage(canvas,0,0);
+   mask.globalCompositeOperation='source-in';
+   mask.fillStyle='white';
+   mask.fillRect(0,0,light.width,light.height);
+  }
   canvas.dataset.rendered='true';canvas.dataset.modelEdition='hardcover';canvas.dataset.faceCount=String(faces.length);
  }).catch(()=>{canvas.parentElement.innerHTML=flat8(d);});
 };

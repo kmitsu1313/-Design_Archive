@@ -138,13 +138,24 @@
 .orbit8 .orbit-face12{opacity:1!important}
 /* Composite the wash above the opaque books and below the timeline labels. */
 .orbit8 .orbit-flow8{isolation:isolate;z-index:0}
-.orbit8 .orbit-flow8::after,.shelf9 .shelf-space7::before{
+.orbit8 .orbit-flow8::after{
  content:"";position:absolute;inset:0;z-index:51;pointer-events:none;
 }
 .orbit8 .orbit-flow8::after{
  background:linear-gradient(to top right,rgba(255,255,255,.95),transparent 36%,transparent 65%,rgba(255,255,255,.87));
 }
-.shelf9 .shelf-space7::before{
- background:linear-gradient(to right,rgba(255,255,255,.78),transparent 16%,transparent 84%,rgba(255,255,255,.78));
+/* The white canvas follows the book silhouette; its mask follows the shelf edges. */
+@property --book-center-offset { syntax: "<length>"; inherits: false; initial-value: 0px; }
+.shelf9 .model8{position:relative}
+.shelf9 .book-edge-light{
+ position:absolute;inset:0;pointer-events:none;
+ --book-center-offset:calc(var(--slot9) * var(--step9) + var(--drag9,0px));
+ --center:calc(50% - var(--book-center-offset));
+ mask-image:linear-gradient(to right,
+   rgb(0 0 0 / .78) calc(var(--center) - 50vw),transparent calc(var(--center) - 34vw),
+   transparent calc(var(--center) + 34vw),rgb(0 0 0 / .78) calc(var(--center) + 50vw));
+ transition:--book-center-offset 1s var(--ease7);
 }
+.shelf-wrap .book-edge-light,.shelf-offscreen .book-edge-light{transition:none}
+@media(prefers-reduced-motion:reduce){.shelf9 .book-edge-light{transition:none}}
 .detail-editorial7{grid-template-columns:minmax(220px,27%) minmax(0,1fr);gap:8%;max-width:1200px;margin:auto}.detail-text7 section::after{display:none}.detail-text7 section{border-radius:0;margin-bottom:36px;padding-bottom:32px}.detail-text7 p{font-size:15px;line-height:2}.copy22{position:relative}.copy22.collapsed22{max-height:165px;overflow:hidden;mask-image:linear-gradient(#000 45%,transparent 100%)}.expand22{display:block;margin-top:12px;padding:8px 0;background:none;border:0;font-size:13px;color:inherit;cursor:pointer}.expand22:hover{text-decoration:underline}.source22{font-size:12px!important;opacity:.55}.row-meta22{display:block;margin-top:6px;font-size:12px!important;font-weight:400;line-height:1.7;color:#969c9e}.list-row8{padding:20px 0}.detail-meta7 dl{font-size:12px}.expand22:focus-visible{outline:2px solid currentColor;outline-offset:4px}@media(max-width:700px){.detail-editorial7{grid-template-columns:1fr;gap:35px}.detail-meta7{position:static}.row-meta22{font-size:11px!important}}
