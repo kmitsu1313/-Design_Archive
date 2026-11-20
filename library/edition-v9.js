@@ -1,6 +1,24 @@
 const ease9='cubic-bezier(.22,1,.36,1)';let selecting9=false,entering9=false;
 function slot9(i,selected=selected7){let n=(i-selected+referenceBooks.length)%referenceBooks.length;return n>referenceBooks.length/2?n-referenceBooks.length:n;}
-function shelfPose9(el,n){el.style.setProperty('--slot9',n);el.style.setProperty('--scale9',n===0?1.13:Math.abs(n)===1?.97:1);el.style.setProperty('--turn9',`${n<0?7:n>0?-7:0}deg`);el.style.setProperty('--roll9',`${n<0?-1.4:n>0?1.4:0}deg`);el.style.opacity=Math.abs(n)>=3?'.7':'1';el.classList.toggle('chosen',n===0);el.style.zIndex=20-Math.abs(n);}
+function shelfPose9(el, n) {
+  const previous = el.style.getPropertyValue('--slot9');
+  const wraps = previous !== '' && Math.abs(n - Number(previous)) > referenceBooks.length / 2;
+  if (wraps) el.classList.add('shelf-wrap');
+
+  el.style.setProperty('--slot9', n);
+  el.style.setProperty('--scale9', n === 0 ? 1.13 : Math.abs(n) === 1 ? .97 : 1);
+  el.style.setProperty('--turn9', (n < 0 ? 7 : n > 0 ? -7 : 0) + 'deg');
+  el.style.setProperty('--roll9', (n < 0 ? -1.4 : n > 0 ? 1.4 : 0) + 'deg');
+  el.style.opacity = Math.abs(n) >= 3 ? '.7' : '1';
+  el.classList.toggle('chosen', n === 0);
+  el.style.zIndex = 20 - Math.abs(n);
+
+  if (wraps) {
+    // Commit the offscreen position before enabling normal transitions again.
+    void getComputedStyle(el).transform;
+    el.classList.remove('shelf-wrap');
+  }
+}
 home7=function(){const d=referenceBooks[selected7];return `<section class="shelf7 shelf9"><div class="room9" aria-hidden="true"><div class="room-floor9"></div></div><div class="shelf-space7" tabindex="0" aria-label="左右滑动或使用方向键选书"><div class="shelf-ledge7"></div><div class="shelf-track7">${referenceBooks.map((b,i)=>`<button class="shelf-item7" data-index9="${i}" onclick="pickBook7('${b.id}')" aria-label="打开 ${esc(b.title)}">${volume7(b)}</button>`).join('')}</div></div><div class="shelf-caption7"><div class="shelf-title7"><small>${String(selected7+1).padStart(2,'0')} / ${referenceBooks.length}</small><div><h1>${d.title}</h1><p>${d.en}</p></div></div><div class="shelf-actions7"><button onclick="moveShelf7(-1)" aria-label="上一本">‹</button><a href="#detail/${d.id}" onclick="event.preventDefault();pickBook7('${d.id}')">OPEN</a><button onclick="moveShelf7(1)" aria-label="下一本">›</button></div><div class="shelf-markers7">${referenceBooks.map((b,i)=>`<button class="${i===selected7?'active':''}" onclick="selectShelf7(${i})" aria-label="选中 ${esc(b.title)}"></button>`).join('')}</div></div></section>${center7()}`;};
 selectShelf7=function(i){if(selecting9||entering9)return;const next=(i+referenceBooks.length)%referenceBooks.length;if(next===selected7)return;selecting9=true;const text=$('.shelf-title7');text?.animate([{opacity:1,transform:'translateY(0)'},{opacity:0,transform:'translateY(9px)'}],{duration:210,easing:ease9,fill:'forwards'});selected7=next;$$('#app .shelf-item7').forEach(el=>shelfPose9(el,slot9(+el.dataset.index9)));$$('.shelf-markers7 button').forEach((b,j)=>b.classList.toggle('active',j===next));setTimeout(()=>{if(!text?.isConnected)return;const d=referenceBooks[next];text.innerHTML=`<small>${String(next+1).padStart(2,'0')} / ${referenceBooks.length}</small><div><h1>${d.title}</h1><p>${d.en}</p></div>`;text.getAnimations().forEach(a=>a.cancel());text.animate([{opacity:0,transform:'translateY(-9px)'},{opacity:1,transform:'translateY(0)'}],{duration:530,easing:ease9,fill:'forwards'});$('.shelf-actions7>a').href='#detail/'+d.id;$('.shelf-actions7>a').onclick=e=>{e.preventDefault();pickBook7(d.id)};},reduced()?0:210);setTimeout(()=>selecting9=false,reduced()?0:850);};
 const originalDetails9=details7;
