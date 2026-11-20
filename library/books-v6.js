@@ -17,8 +17,8 @@ collection.splice(0,collection.length,...referenceBooks);
 shelfBooks.splice(0,shelfBooks.length,...referenceBooks);
 doc=function(id){return collection.find(d=>d.id===id)||legacyDocs.find(d=>d.id===id)||collection[0]};
 selectedVolume=0; mode='grid';
-cover=function(n=0){const d=referenceBooks[n%referenceBooks.length];return `<span class="cover-texture" role="img" aria-label="${esc(d.title)}封面" style="--atlas:url('${photoURLs[d.cover]}')"></span>`};
-book=function(d){if(!referenceBooks.includes(d))return `<div class="volume-object"><div class="volume-front">${cover(d.cover)}</div></div>`;return `<div class="volume-object reference-volume" style="--book-color:${d.accent};--atlas:url('${photoURLs[d.cover]}')"><div class="volume-inner"></div><div class="reference-spine" aria-hidden="true"></div><div class="volume-front">${cover(d.cover)}</div></div>`};
+cover=function(n=0){const d=referenceBooks[n%referenceBooks.length];return `<span class="cover-texture" role="img" aria-label="${esc(d.title)}封面" style="--atlas:url('assets/books/thumbs/book-${d.cover}.webp')"></span>`};
+book=function(d){if(!referenceBooks.includes(d))return `<div class="volume-object"><div class="volume-front">${cover(d.cover)}</div></div>`;return `<div class="volume-object reference-volume" style="--book-color:${d.accent};--atlas:url('assets/books/thumbs/book-${d.cover}.webp')"><div class="volume-inner"></div><div class="reference-spine" aria-hidden="true"></div><div class="volume-front">${cover(d.cover)}</div></div>`};
 startIntro=function(){};
 shelfMarkup=function(){const track=$('.continuous-books');if(!track)return;track.innerHTML=Array.from({length:11},(_,i)=>{const slot=i-5,d=shelfBooks[(selectedVolume+slot+shelfBooks.length)%shelfBooks.length];return `<button class="loop-book" data-slot="${slot}" style="--slot:${slot}" onclick="openVolume('${d.id}')" aria-label="查看 ${esc(d.title)}">${book(d)}</button>`}).join('')};
 selectVolume=function(i){if(shelfBusy)return;const delta=Math.sign(i-selectedVolume);if(!delta)return;shelfBusy=true;const track=$('.continuous-books');if(!track){shelfBusy=false;return}track.style.transition=reduced()?'none':'transform 450ms ease';track.style.transform=`translateX(calc(var(--book-step) * ${-delta}))`;setTimeout(()=>{selectedVolume=(selectedVolume+delta+shelfBooks.length)%shelfBooks.length;track.style.transition='none';track.style.transform='';shelfMarkup();const d=shelfBooks[selectedVolume];$('#volume-number').textContent=`${selectedVolume+1} / ${shelfBooks.length}`;$('#volume-name').textContent=d.title;$('#volume-zh').textContent=d.en;$('#open-volume').href='#detail/'+d.id;shelfBusy=false},reduced()?0:460)};
@@ -32,7 +32,7 @@ render=function(){renderBefore6();if(current==='home'){$('#volume-number').textC
 
 
 const atlasDimensions6=[[1140,1380],[1125,1398],[1184,1328],[1122,1402],[1110,1417],[1062,1482],[1247,1261],[1163,1353],[1213,1296],[1215,1295]];
-cover=function(n=0){const d=referenceBooks[n%10],[w,h]=atlasDimensions6[d.cover];return `<svg class="reference-cover-svg" viewBox="${w*.1} 0 ${w*.9} ${h}" role="img" aria-label="${esc(d.title)}封面"><image href="${photoURLs[d.cover]}" width="${w}" height="${h}"/></svg>`};
+cover=function(n=0){const d=referenceBooks[n%10],[w,h]=atlasDimensions6[d.cover];return `<svg class="reference-cover-svg" viewBox="${w*.1} 0 ${w*.9} ${h}" role="img" aria-label="${esc(d.title)}封面"><image href="assets/books/thumbs/book-${d.cover}.webp" width="${w}" height="${h}"/></svg>`};
 
 
 const bookBeforeRatio6=book;book=function(d){let html=bookBeforeRatio6(d);if(referenceBooks.includes(d)){const [w,h]=atlasDimensions6[d.cover];html=html.replace("--book-color:", "--cover-ratio:"+((w*.9)/h)+";--book-color:");}return html};

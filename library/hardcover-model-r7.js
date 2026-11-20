@@ -85,7 +85,8 @@ mesh8=function(canvas,d){
   });
   ctx.save();path(expanded);ctx.clip();ctx.setTransform(m[0],n[0],m[1],n[1],m[2],n[2]);ctx.drawImage(source,0,0);ctx.restore();
  }
- return texture8(asset7(d)).then(im=>{
+ const texture=canvas.closest('.continuous-book-r7')?shelfAtlas7(d):asset7(d);
+ function paint(im){
   if(!canvas.isConnected||canvas._paintRevision!==revision)return;
   if(canvas.width!==renderWidth||canvas.height!==renderHeight){canvas.width=renderWidth;canvas.height=renderHeight;}else ctx.clearRect(0,0,canvas.width,canvas.height);ctx.imageSmoothingEnabled=true;ctx.imageSmoothingQuality='high';
   const paper=document.createElement('canvas');paper.width=256;paper.height=512;const pc=paper.getContext('2d');pc.fillStyle='#f1eddf';pc.fillRect(0,0,256,512);for(let i=0;i<256;i+=2){pc.fillStyle=i%6?'#e7e2d6':'#d9d2c3';pc.fillRect(i,0,.5,512);}const pg=pc.createLinearGradient(0,0,256,0);pg.addColorStop(0,'#00000018');pg.addColorStop(.2,'#ffffff10');pg.addColorStop(1,'#00000010');pc.fillStyle=pg;pc.fillRect(0,0,256,512);
@@ -128,7 +129,11 @@ mesh8=function(canvas,d){
    mask.fillRect(0,0,light.width,light.height);
   }
   canvas.dataset.rendered='true';canvas.dataset.modelEdition='hardcover';canvas.dataset.faceCount=String(faces.length);
- }).catch(()=>{canvas.parentElement.innerHTML=flat8(d);});
+ }
+ if(canvas.closest('.detail-object7')&&!canvas.dataset.rendered){
+  texture8(shelfAtlas7(d)).then(im=>{if(!canvas.dataset.rendered)paint(im);});
+ }
+ return texture8(texture).then(paint).catch(()=>{if(canvas.isConnected&&canvas._paintRevision===revision)canvas.parentElement.innerHTML=flat8(d);});
 };
 
 render7();
