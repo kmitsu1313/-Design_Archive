@@ -1,0 +1,4 @@
+Three.js r158 — MIT License, copyright the three.js authors. https://github.com/mrdoob/three.js/blob/r158/LICENSE
+GSAP 3.12.5 — copyright GreenSock. Standard License: https://gsap.com/standard-license/
+Tabler Icons 3.31.0 — MIT License, copyright Paweł Kuna. https://github.com/tabler/tabler-icons/blob/main/LICENSE
+Source imagery, PDF pages and DRC mark were supplied for this course demonstration.

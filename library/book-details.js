@@ -36,7 +36,7 @@ details7 = function(book) {
   }
   if(!record) html=html.replace(/(<span>书本简评<\/span><div class="copy22">)([\s\S]*?)(<\/div>)/,(_,start,copy,end)=>start+'<div class="reader-entry">'+avatar()+'<div>'+copy+'</div></div>'+end);
   if (book.id === 'wendao') {
-    html = html.replace('</aside>', '<a class="case-link7" href="wendao/index.html">进入问道 · 图像叙事<span>↗</span></a></aside>');
+    html = html.replace('</aside>', '<a class="case-link7" href="wendao/index.html">进入问道交互阅读<span>↗</span></a></aside>');
   }
   return html;
 };

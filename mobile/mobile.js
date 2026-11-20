@@ -299,6 +299,11 @@
   render();
   // The main site's portal embeds the library. Standalone previews use the ordinary link.
   if (window.frameElement?.id === 'library') {
+    window.addEventListener('message', event => {
+      if (event.source !== parent || event.data?.type !== 'drc:route') return;
+      const term = event.data.query || '';
+      location.hash = event.data.about ? 'about' : term ? 'library?q=' + encodeURIComponent(term) : 'home';
+    });
     parent.postMessage({type:'drc:library-ready'}, '*');
     document.querySelector('.sphere-link').addEventListener('click', event => {
       event.preventDefault();

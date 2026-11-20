@@ -1,0 +1,41 @@
+#hongqi-reader-overlay{position:fixed;inset:0;z-index:55;background:var(--hk-bg);color:var(--hk-ink);font-family:inherit;overflow:hidden;isolation:isolate}
+body.hk-reader-active{overflow:hidden!important}
+#hongqi-reader-overlay button,#hongqi-reader-overlay a{font:inherit;color:inherit;background:transparent;border:0;cursor:pointer;text-decoration:none}
+#hongqi-reader-overlay .hk-topline{position:absolute;top:125px;left:6%;right:6%;display:flex;justify-content:space-between;font-size:12px;opacity:.7;z-index:4}
+#hongqi-reader-overlay .hk-topline button{padding:0}
+#hongqi-reader-overlay .hk-model-stage{position:absolute;inset:0;pointer-events:none}
+#hongqi-reader-overlay .hk-original-model{pointer-events:auto;z-index:1;filter:drop-shadow(18px 24px 22px #0002)!important;touch-action:none;outline-offset:8px}
+#hongqi-reader-overlay .hk-original-model canvas{width:100%;height:100%;display:block}
+#hongqi-reader-overlay .hk-reader-title{position:absolute;left:24%;right:24%;top:145px;display:flex;align-items:center;justify-content:space-between;z-index:3;font-size:17px}
+#hongqi-reader-overlay .hk-reader-title small{font-size:12px;margin-left:18px;opacity:.6}
+#hongqi-reader-overlay .hk-reader-title button{font-size:12px;opacity:.75}
+#hongqi-reader-overlay .hk-reader-hint{position:absolute;bottom:40px;left:0;right:0;text-align:center;font-size:12px;letter-spacing:.1em;opacity:.6;pointer-events:none}
+#hongqi-reader-overlay .hk-page{position:absolute;top:52%;width:48px;height:48px;font-size:32px;border:1px solid #ffffff33;border-radius:50%;z-index:4;opacity:.7;transition:opacity .25s,background .25s}
+#hongqi-reader-overlay .hk-page:hover{opacity:1;background:#ffffff0b}
+#hongqi-reader-overlay .hk-page:disabled{opacity:.2;cursor:default}
+#hongqi-reader-overlay .hk-prev{left:6%}#hongqi-reader-overlay .hk-next{right:6%}
+#hongqi-reader-overlay .hk-reader-footer{position:absolute;bottom:24px;left:24%;right:24%;text-align:center;font-size:12px;z-index:3}
+#hongqi-reader-overlay .hk-chapter-links{display:flex;justify-content:center;gap:30px}
+#hongqi-reader-overlay .hk-chapter-links button{font-size:11px;opacity:.6;padding:6px 0;border-bottom:1px solid transparent}
+#hongqi-reader-overlay .hk-chapter-links button.selected{opacity:1;border-bottom-color:currentColor}
+#hongqi-reader-overlay .hk-page-source{font-size:10px;opacity:.6;margin:10px 0}
+#hongqi-reader-overlay .hk-reader-bottom{display:flex;justify-content:space-between;font-size:11px;opacity:.6}
+#hongqi-reader-overlay .hk-interactive-link{position:absolute;right:3.1%;bottom:26px;padding:8px 0;border-bottom:1px solid currentColor;font-size:12px;opacity:.85;z-index:4;transition:opacity .25s}
+#hongqi-reader-overlay .hk-interactive-link:hover{opacity:1}
+#hongqi-reader-overlay [hidden]{display:none!important}
+#hongqi-reader-overlay .hk-zoom{position:fixed;inset:0;width:94vw;height:94dvh;max-width:none;max-height:94dvh;padding:56px 28px 25px;border:0;background:#ede6da;color:#5c4032;overflow:auto}
+#hongqi-reader-overlay .hk-zoom::backdrop{background:#1f0c0bd9;backdrop-filter:blur(8px)}
+#hongqi-reader-overlay .hk-zoom-close{position:fixed;right:5vw;top:4vh;font-size:28px}
+#hongqi-reader-overlay .hk-zoom-pages{display:flex;align-items:flex-start;gap:16px;min-height:100%;overflow:auto}
+#hongqi-reader-overlay .hk-zoom-pages img{width:calc(50% - 8px);height:auto;flex-shrink:0;object-fit:contain}
+@media(max-height:780px){#hongqi-reader-overlay .hk-topline{top:100px}#hongqi-reader-overlay .hk-reader-title{top:132px}#hongqi-reader-overlay .hk-reader-footer{bottom:18px}}
+@media(max-width:700px){#hongqi-reader-overlay .hk-reader-title{left:12%;right:12%;font-size:14px}#hongqi-reader-overlay .hk-reader-title small{display:none}#hongqi-reader-overlay .hk-reader-footer{left:12%;right:12%;bottom:65px}#hongqi-reader-overlay .hk-chapter-links{gap:14px}#hongqi-reader-overlay .hk-chapter-links button{font-size:9px}#hongqi-reader-overlay .hk-prev{left:2%}#hongqi-reader-overlay .hk-next{right:2%}#hongqi-reader-overlay .hk-page{width:34px;height:34px;font-size:24px}#hongqi-reader-overlay .hk-interactive-link{right:5%;bottom:20px}.hk-zoom-pages img{min-width:80vw}}
+
+/* R7: reading title removed; solid chevrons match the supplied reference. */
+#hongqi-reader-overlay .hk-reader-title{justify-content:flex-end}
+#hongqi-reader-overlay .hk-page,#hongqi-reader-overlay .hk-page:is(:hover,:focus,:active){border:0!important;border-radius:0!important;background:transparent!important;box-shadow:none!important;outline:none!important;display:grid;place-items:center;padding:0}
+#hongqi-reader-overlay .hk-page svg{display:block;width:18px;height:26px;pointer-events:none}
+#hongqi-reader-overlay .hk-prev svg{transform:rotate(180deg)}
+.continuous-book-r7{opacity:1!important;mix-blend-mode:normal;pointer-events:none}
+.continuous-book-r7 canvas{opacity:1!important;mix-blend-mode:normal}
+body.continuous-book-active .detail-object7 .model8{transition:none!important;animation:none!important}

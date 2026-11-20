@@ -1,0 +1,49 @@
+
+.drc-navigation{position:fixed;left:96.9vw;right:auto!important;transform:translateX(-100%);width:max-content!important;top:34px;display:flex!important;align-items:center;gap:16px!important;z-index:22000;color:#50565a;background:transparent}.drc-navigation.invert-ui{color:#afa9a5}
+.drc-navigation button,.layout-picker button{position:relative;display:grid;place-items:center;width:40px;height:40px;padding:6px;background:none;border:0;color:inherit;cursor:pointer;flex-shrink:0}
+.drc-navigation svg,.layout-picker svg{width:28px;height:28px;display:block}.category-strip{display:flex;gap:16px;max-width:0;opacity:0;visibility:hidden;overflow:visible;pointer-events:none;transition:max-width .5s cubic-bezier(.22,1,.36,1),opacity .3s,visibility .5s}
+.category-strip button{opacity:0;transform:translateX(20px);transition:opacity .35s,transform .5s cubic-bezier(.22,1,.36,1);transition-delay:calc((3 - var(--i))*45ms)}
+.collection-open .category-strip{max-width:224px;opacity:1;visibility:visible;pointer-events:auto}.collection-open .category-strip button{opacity:1;transform:translateX(0)}
+.nav-label{position:absolute;top:45px;left:50%;transform:translate(-50%,-4px);font-size:12px;white-space:nowrap;opacity:0;pointer-events:none;transition:opacity .25s,transform .25s;line-height:1.4}.nav-label:before{content:'';position:absolute;width:23px;height:1px;background:currentColor;top:-7px;left:50%;transform:translateX(-50%)}
+.drc-navigation button:hover .nav-label,.drc-navigation button:focus-visible .nav-label,.layout-picker button:hover .nav-label{opacity:1;transform:translate(-50%,0)}
+.layout-picker{display:flex;align-items:center;gap:12px;margin-left:26px;margin-right:auto;color:#50565a}.layout-options{display:flex;gap:12px;max-width:0;opacity:0;visibility:hidden;transform:translateX(-10px);transition:max-width .45s,opacity .3s,transform .4s,visibility .4s}
+.layout-picker:hover .layout-options,.layout-picker:focus-within .layout-options{max-width:220px;opacity:1;visibility:visible;transform:translateX(0)}.layout-options button{color:#aaa}.layout-options button.selected{color:#50565a}.layout-options button.selected:after{content:'';position:absolute;bottom:0;width:22px;height:1px;background:currentColor}
+.site-header>.library-toolbar7{display:none!important}.shelf-actions7>a{background:#222!important;color:white!important;border:1px solid #222!important;transition:background .25s,color .25s}.shelf-actions7>a:hover{background:transparent!important;color:#50565a!important}
+#detail{padding:12px 8px 12px 16px!important;overflow:hidden!important;cursor:grab;max-height:25dvh!important}#detail:active{cursor:grabbing}#detail[open]{display:block!important}.detail-scroll{display:grid;grid-template-columns:74px minmax(0,1fr);gap:17px;max-height:calc(25dvh - 26px);overflow:auto;padding:10px 28px 10px 4px;scrollbar-width:thin;scrollbar-color:#999 transparent;overscroll-behavior:contain}.detail-scroll::-webkit-scrollbar{width:6px}.detail-scroll::-webkit-scrollbar-thumb{background:#999;border-radius:6px}.detail-scroll::-webkit-scrollbar-track{background:transparent}#detail #close{z-index:2;right:17px;top:12px}
+#sphere-search{position:fixed;inset:20% auto auto 50%;transform:translateX(-50%);width:min(550px,90vw);height:auto;padding:25px;border:1px solid #ddd;border-radius:15px;background:#fffffff0}#sphere-search form{display:flex;gap:14px}#sphere-search input{min-width:0;flex:1;border:0;border-bottom:1px solid #aaa;padding:12px;background:none}#sphere-search button{background:none;border:0;cursor:pointer}
+@media(max-width:800px){.drc-navigation{gap:7px!important}.category-strip{gap:5px}.collection-open .category-strip{max-width:175px}.layout-picker{margin-left:12px;gap:3px}.layout-options{gap:3px}.layout-picker button{width:33px}}@media(max-width:600px){.drc-navigation{top:22px;left:95vw;right:auto!important}.category-strip{position:absolute;right:0;top:50px}.collection-open .category-strip{max-width:200px}.layout-picker{position:absolute;left:5%;top:85px;margin:0}.detail-scroll{grid-template-columns:58px minmax(0,1fr);gap:12px}}
+@media(prefers-reduced-motion:reduce){.category-strip,.category-strip button,.layout-options,.nav-label{transition:none}}
+
+#sphere-search[open]{display:block;max-height:70vh}#sphere-search::backdrop{background:#ffffffa0;backdrop-filter:blur(12px)}
+
+/* Match the existing detail-page brand exactly, including its softened opacity. */
+body.detail-mode9 .drc-navigation,body.detail-mode9 .layout-picker{color:var(--detail-ink9)!important;opacity:.7}
+html,body{max-width:100%;overflow-x:clip}#app,.library7{max-width:100%;min-width:0}.orbit8{overflow:hidden}
+
+/* Research center content is opened from the DRC identity. */
+body.shelf-home-only>footer{display:none!important}
+#center-introduction{position:fixed;inset:0;width:100%;max-width:none;height:100dvh;max-height:100dvh;margin:0;padding:0;border:0;border-radius:0;background:#fff;color:#555b5e;overflow:hidden;box-sizing:border-box;animation:center-introduction-in .65s var(--ease7,ease) both}
+#center-introduction::backdrop{background:#fff}
+#center-introduction .introduction-scroll{height:100%;overflow-y:auto;overflow-x:hidden;overscroll-behavior:contain}
+#center-introduction .center7{min-height:calc(100dvh - 100px);box-sizing:border-box;border-top:0;align-items:center;padding-top:180px;padding-bottom:80px}
+#center-introduction .introduction-close{position:absolute;right:3.1%;top:28px;z-index:5;width:44px;height:44px;padding:0;border:0;background:transparent;color:#50565a;font-size:32px;cursor:pointer}
+@keyframes center-introduction-in{from{opacity:0}to{opacity:1}}
+@media(max-width:600px){#center-introduction .center7{padding-top:100px;padding-bottom:60px}}
+@media(prefers-reduced-motion:reduce){#center-introduction{animation:none}}
+
+/* The same viewport anchor and box metrics apply outside every page header. */
+body > .drc-navigation{position:fixed!important;inset:auto!important;left:96.9vw!important;top:34px!important;transform:translateX(-100%)!important;width:max-content!important;height:40px!important;margin:0!important;padding:0!important;border:0!important;box-sizing:border-box!important;gap:16px!important;flex-wrap:nowrap!important;justify-content:flex-start!important}
+body > .drc-navigation button{box-sizing:border-box!important;width:40px!important;height:40px!important;margin:0!important;padding:6px!important;border:0!important;flex:0 0 40px!important}
+body > .drc-navigation svg{width:28px!important;height:28px!important;margin:0!important}
+@media(max-width:800px){body > .drc-navigation{gap:7px!important}}
+@media(max-width:600px){body > .drc-navigation{left:95vw!important;top:22px!important}}
+html.introduction-only body > :not(#center-introduction){display:none!important;visibility:hidden!important;pointer-events:none!important}
+html.introduction-only #center-introduction{visibility:visible!important}
+
+/* Keep UI coordinates independent of a page's reserved scrollbar gutter. */
+body > .drc-navigation{left:var(--drc-nav-right-edge,96.9vw)!important}
+#center-introduction .introduction-close,
+#center-introduction .introduction-close:is(:focus,:focus-visible,:hover,:active){outline:none!important;outline-offset:0!important;border:0!important;box-shadow:none!important;background:transparent!important}
+
+.layout-options a{display:grid;place-items:center;width:40px;height:40px;color:inherit}
+.layout-picker:is(:hover,:focus-within) .layout-options{max-width:270px}
