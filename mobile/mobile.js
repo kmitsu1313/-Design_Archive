@@ -23,7 +23,7 @@
   try { const data = JSON.parse(localStorage.getItem(storageKey) || '[]'); if(Array.isArray(data)) saved = [...new Set(data.filter(id => books.some(b => b.id === id)))]; } catch {}
   let selected = 0, query = '', category = '全部', sort = 'collection';
   let route = '', returnRoute = 'home', scrollPositions = new Map(), shelfListener, shelfResize, introObserver;
-  let toastTimer;
+  let toastTimer, shelfEvents;
   let spineEntry='';
   window.addEventListener('archive:spine-open',event=>{spineEntry=event.detail?.id||'';});
   const categories = ['全部','工业设计','视觉文化','设计研究'];
@@ -132,26 +132,31 @@
     shelf.addEventListener('scrollend',settle);
     shelf.addEventListener('keydown',event=>{if(['ArrowLeft','ArrowRight'].includes(event.key)){event.preventDefault();shelfListener(event.key==='ArrowRight'?1:-1);}if(event.key==='Enter'&&event.target===shelf){location.hash='detail/'+books[selected].id;}});
     // Touch uses native momentum scrolling; mouse dragging also works in the desktop preview.
+    shelfEvents = new AbortController();
+    const pointerOptions = {signal:shelfEvents.signal};
     let mouseStart=0,mouseScroll=0,dragged=false;
     shelf.addEventListener('dragstart',event=>event.preventDefault());
     shelf.addEventListener('pointerdown',event=>{
       if(event.pointerType!=='mouse'||event.button!==0)return;
       mouseStart=event.clientX;mouseScroll=shelf.scrollLeft;mouseDown=true;dragged=false;
+
     });
-    shelf.addEventListener('pointermove',event=>{
-      if(!mouseDown)return;
+    window.addEventListener('pointermove',event=>{
+      if(!mouseDown||event.pointerType!=='mouse')return;
       const dx=event.clientX-mouseStart;
-      if(Math.abs(dx)>5&&!dragged){dragged=true;shelf.setPointerCapture(event.pointerId);shelf.style.scrollSnapType='none';}
+      if(Math.abs(dx)>5&&!dragged){dragged=true;shelf.style.scrollSnapType='none';}
       if(dragged){event.preventDefault();shelf.scrollLeft=mouseScroll-dx;}
-    });
+    },pointerOptions);
     const stopDrag=event=>{
       if(!mouseDown)return;mouseDown=false;
       if(!dragged)return;
-      if(shelf.hasPointerCapture(event.pointerId))shelf.releasePointerCapture(event.pointerId);
+
       const closest=nearest();selected=closest%books.length;
       shelf.style.scrollSnapType='';shelf.scrollTo({left:center(closest),behavior:reduced?'instant':'smooth'});updateShelf();
     };
-    shelf.addEventListener('pointerup',stopDrag);shelf.addEventListener('pointercancel',stopDrag);
+    window.addEventListener('pointerup',stopDrag,pointerOptions);
+    window.addEventListener('pointercancel',stopDrag,pointerOptions);
+    window.addEventListener('blur',stopDrag,pointerOptions);
     shelf.addEventListener('click',event=>{if(dragged){event.preventDefault();event.stopPropagation();dragged=false;}},true);
     shelfResize?.disconnect();
     shelfResize=new ResizeObserver(()=>{if(shelf.isConnected)jump(books.length+selected);});
@@ -205,6 +210,7 @@
     const b=books.find(b=>route===`detail/${b.id}`);
     const enterIntroduction=!!b&&spineEntry===b.id;
     spineEntry='';
+    shelfEvents?.abort();
     introObserver?.disconnect();
     window.ArchiveSpines?.cleanup();
     bookTheme(b);
@@ -244,7 +250,11 @@
   function toast(message) {
     const el=document.querySelector('#toast');el.textContent=message;el.classList.add('visible');clearTimeout(toastTimer);toastTimer=setTimeout(()=>el.classList.remove('visible'),2400);
   }
-  function persist() {try{localStorage.setItem(storageKey,JSON.stringify(saved));}catch{toast('当前浏览器无法保存，记录仅在本次浏览保留。');}}
+  function persist(message) {
+    try { localStorage.setItem(storageKey,JSON.stringify(saved)); }
+    catch { toast('当前浏览器无法保存，修改仅在本次浏览生效。'); return; }
+    toast(message);
+  }
   document.addEventListener('click',event=>{
     if(event.target.closest('.skip')){event.preventDefault();main.focus();main.scrollIntoView({block:'start'});return;}
     const anchor=event.target.closest('a[href^="#"]');
@@ -272,10 +282,10 @@
     }
     if(action==='save') {
       const id=button.dataset.id;
-      if(!saved.includes(id)){saved.push(id);persist();navigation();button.setAttribute('aria-pressed','true');button.classList.add('outline');button.innerHTML=`${svg('check')}<span>已加入阅览台</span>`;toast('已加入阅览台');}else{toast('这本书已在阅览台');}
+      if(!saved.includes(id)){saved.push(id);navigation();button.setAttribute('aria-pressed','true');button.classList.add('outline');button.innerHTML=`${svg('check')}<span>已加入阅览台</span>`;persist('已加入阅览台');}else{toast('这本书已在阅览台');}
     }
     if(action==='remove') {
-      saved=saved.filter(id=>id!==button.dataset.id);persist();const y=scrollY;render(true);window.scrollTo(0,y);toast('已从阅览台移除');
+      saved=saved.filter(id=>id!==button.dataset.id);const y=scrollY;render(true);window.scrollTo(0,y);persist('已从阅览台移除');
     }
   });
   window.addEventListener('hashchange',()=>render());

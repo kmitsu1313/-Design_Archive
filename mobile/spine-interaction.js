@@ -145,7 +145,7 @@
       event.preventDefault();if(opening)return;
       reveal(center,anchor,book,href.slice(1));
     };
-    binding={center,click,navigate:()=>cleanup(),leave:()=>cleanup({force:true})};
+    binding={center,click,navigate:()=>cleanup(),leave:finish};
     center.addEventListener('click',click);
     window.addEventListener('hashchange',binding.navigate);
     window.addEventListener('pagehide',binding.leave);
