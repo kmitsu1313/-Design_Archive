@@ -128,3 +128,15 @@ body:before{opacity:.27}
 /* 全站隐藏滚动条：保留滚动能力，仅隐藏滚动条视觉，避免破坏排版 */
 html{scrollbar-width:none}
 ::-webkit-scrollbar{width:0!important;height:0!important}
+
+@media (max-width:760px) {
+ .hqm-actions { display:flex; gap:12px; margin-top:18px }
+ .hqm-actions button, #hq-mobile > button { min-height:44px; border:1px solid #b8b3aa; background:transparent; padding:0 14px; color:inherit }
+ .hqm-enlarge { position:absolute; inset:0; z-index:2; background:none; border:0; color:transparent; cursor:zoom-in }
+ .hqm-enlarge:focus-visible { outline:2px solid #b44a36; outline-offset:-2px }
+}
+@media (max-width:760px) and (prefers-reduced-motion:reduce) {
+ #hq-mobile [data-plx], .hqm-panfig img { transform:none!important }
+ .hqm-panfig img { width:100%!important }
+ #hqm-progress * { transition:none }
+}

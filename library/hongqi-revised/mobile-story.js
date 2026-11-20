@@ -17,6 +17,24 @@ const headTitle=document.createElement('h1');headTitle.textContent='演进 · �
 const headTip=document.createElement('p');headTip.className='hqm-tip';headTip.textContent='下滑阅读 · 图像与文字随滚动浮动';
 head.append(headMeta,headTitle,headTip);
 root.append(head);
+function action(label, onClick) {
+ const button = document.createElement('button');
+ button.type = 'button';
+ button.textContent = label;
+ button.addEventListener('click', onClick);
+ return button;
+}
+const nav = document.createElement('nav');
+nav.className = 'hqm-actions';
+nav.setAttribute('aria-label', '阅读工具');
+nav.append(action('章节目录', () => {
+ const cover = document.querySelector('#chapter-cover');
+ cover.hidden = false;
+ cover.classList.remove('leaving', 'text-leaving19');
+ document.body.classList.add('in-directory');
+ cover.querySelectorAll('.chapter-strip')[2].focus({preventScroll:true});
+}), action('图集', () => window.hongqiOpenGallery()));
+head.append(nav);
 seq.forEach((id,idx)=>{
  const raw=scenes.find(s=>s.id===id);if(!raw)return;
  const g=document.querySelector('#copy g[data-scene="'+id+'"]');
@@ -38,6 +56,11 @@ seq.forEach((id,idx)=>{
   if(imgs.length>1)fig.classList.add(i%2?'hqm-fig--right':'hqm-fig--left');
   const im=document.createElement('img');im.src=srcOf(k);im.alt=capOf(k);im.loading='lazy';
   const cap=document.createElement('figcaption');cap.textContent=capOf(k);
+  const open = action('查看大图', () => window.hongqiOpenGallery(k));
+  open.className = 'hqm-enlarge';
+  open.dataset.galleryKey = k;
+  open.setAttribute('aria-label', '查看大图：' + im.alt);
+  fig.append(open);
   const foc=focusMap[id];
   if(foc&&foc[0]===k){
    const [fx,fy,fw,fh]=foc[1];
@@ -67,11 +90,12 @@ const bar=document.createElement('div');bar.id='hqm-progress';bar.setAttribute('
 const carSvg=document.querySelector('#car');
 const carHtml=carSvg?'<b>'+carSvg.outerHTML.replace(/id="[^"]*"/g,'')+'</b>':'<b class="hqm-dot"></b>';
 bar.innerHTML='<span class="hqm-prog-year">1966</span><span class="hqm-prog-rail"><i></i>'+carHtml+'</span><span class="hqm-prog-idx">01 / '+seq.length+'</span>';
-root.append(bar);
+root.append(action('阅读下一节 ↗', () => window.hongqiChapter(3, '3.2')), bar);
 document.body.append(root);
 
 // —— 滚动效果（仅窄屏生效，尊重减弱动画设置）——
-if(matchMedia('(max-width:760px)').matches&&!matchMedia('(prefers-reduced-motion:reduce)').matches){
+const narrow = matchMedia('(max-width:760px)');
+const motion = matchMedia('(prefers-reduced-motion:reduce)');
  const floats=[...root.querySelectorAll('.hqm-float')];
  const io=new IntersectionObserver(es=>es.forEach(e=>e.target.classList.toggle('on',e.isIntersecting)),{threshold:.12,rootMargin:'0px 0px -6% 0px'});
  floats.forEach(el=>io.observe(el));
@@ -82,7 +106,9 @@ if(matchMedia('(max-width:760px)').matches&&!matchMedia('(prefers-reduced-motion
  let ticking=false;
  const update=()=>{
   ticking=false;
+  if (!narrow.matches || document.body.classList.contains('in-directory')) return;
   const mid=innerHeight/2;
+  if (!motion.matches) {
   plx.forEach(el=>{
    const r=el.getBoundingClientRect();if(r.bottom<-80||r.top>innerHeight+80)return;
    const c=r.top+r.height/2;
@@ -103,6 +129,7 @@ if(matchMedia('(max-width:760px)').matches&&!matchMedia('(prefers-reduced-motion
    const range=img.clientWidth-fig.clientWidth;
    if(range>0)img.style.transform='translate3d('+(-p*range).toFixed(1)+'px,0,0)';
   });
+  }
   let best=null,bd=1e9;
   secs.forEach(s=>{const r=s.getBoundingClientRect();const d=Math.abs(r.top+r.height/2-mid);if(d<bd){bd=d;best=s}});
   if(best){
@@ -116,9 +143,6 @@ if(matchMedia('(max-width:760px)').matches&&!matchMedia('(prefers-reduced-motion
  };
  addEventListener('scroll',()=>{if(!ticking){ticking=true;requestAnimationFrame(update)}},{passive:true});
  addEventListener('resize',update);
+ motion.addEventListener('change',update);
  update();
-}else{
- root.querySelectorAll('.hqm-float').forEach(el=>el.classList.add('on'));
- root.querySelectorAll('.hqm-focusfig').forEach(fig=>fig.style.setProperty('--reveal','1'));
-}
 })();
