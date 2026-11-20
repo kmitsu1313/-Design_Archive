@@ -11,7 +11,7 @@ function shelfPose9(el, n) {
   el.style.setProperty('--scale9', n === 0 ? 1.13 : Math.abs(n) === 1 ? .97 : 1);
   el.style.setProperty('--turn9', (n < 0 ? 7 : n > 0 ? -7 : 0) + 'deg');
   el.style.setProperty('--roll9', (n < 0 ? -1.4 : n > 0 ? 1.4 : 0) + 'deg');
-  el.style.opacity = Math.abs(n) >= 3 ? '.7' : '1';
+
   el.classList.toggle('chosen', n === 0);
   el.style.zIndex = 20 - Math.abs(n);
 

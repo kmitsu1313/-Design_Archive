@@ -136,11 +136,15 @@
 .orbit8 .orbit-card8>.orbit-cube12{transform:translate3d(-50%,-50%,0) rotateX(-25deg) rotateY(-25deg);opacity:1!important;transition:transform .8s cubic-bezier(.22,1,.36,1)}
 .orbit8 .orbit-card8:is(:hover,:focus-visible)>.orbit-cube12{transform:translate3d(-50%,calc(-50% - 38px),0) rotateX(-25deg) rotateY(-25deg)}
 .orbit8 .orbit-face12{opacity:1!important}
-.orbit8 .face12-front::after{content:'';position:absolute;inset:0;background:white;opacity:.14;transition:opacity .65s ease;pointer-events:none}
-.orbit8 .orbit-card8:is(:hover,:focus-visible) .face12-front::after{opacity:0}
-
-.orbit8 .orbit-face12::after{content:'';position:absolute;inset:0;background:#fff;opacity:var(--wash19,.04);transition:opacity .65s ease;pointer-events:none}
-.orbit8 .face12-front::after{opacity:var(--wash19,.04)}
-.orbit8 .orbit-card8:is(:hover,:focus-visible) .orbit-face12::after{opacity:0}
-
+/* Composite the wash above the opaque books and below the timeline labels. */
+.orbit8 .orbit-flow8{isolation:isolate;z-index:0}
+.orbit8 .orbit-flow8::after,.shelf9 .shelf-space7::before{
+ content:"";position:absolute;inset:0;z-index:51;pointer-events:none;
+}
+.orbit8 .orbit-flow8::after{
+ background:linear-gradient(to top right,rgba(255,255,255,.95),transparent 36%,transparent 65%,rgba(255,255,255,.87));
+}
+.shelf9 .shelf-space7::before{
+ background:linear-gradient(to right,rgba(255,255,255,.78),transparent 16%,transparent 84%,rgba(255,255,255,.78));
+}
 .detail-editorial7{grid-template-columns:minmax(220px,27%) minmax(0,1fr);gap:8%;max-width:1200px;margin:auto}.detail-text7 section::after{display:none}.detail-text7 section{border-radius:0;margin-bottom:36px;padding-bottom:32px}.detail-text7 p{font-size:15px;line-height:2}.copy22{position:relative}.copy22.collapsed22{max-height:165px;overflow:hidden;mask-image:linear-gradient(#000 45%,transparent 100%)}.expand22{display:block;margin-top:12px;padding:8px 0;background:none;border:0;font-size:13px;color:inherit;cursor:pointer}.expand22:hover{text-decoration:underline}.source22{font-size:12px!important;opacity:.55}.row-meta22{display:block;margin-top:6px;font-size:12px!important;font-weight:400;line-height:1.7;color:#969c9e}.list-row8{padding:20px 0}.detail-meta7 dl{font-size:12px}.expand22:focus-visible{outline:2px solid currentColor;outline-offset:4px}@media(max-width:700px){.detail-editorial7{grid-template-columns:1fr;gap:35px}.detail-meta7{position:static}.row-meta22{font-size:11px!important}}
