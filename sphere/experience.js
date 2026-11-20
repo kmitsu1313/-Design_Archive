@@ -22,7 +22,7 @@ window.addEventListener('drc:portal-reset',()=>{portalLeaving=false;returnSphere
 function showDetail(item,button){const media=$('#detailMedia');media.replaceChildren();const img=new Image();img.src=item.originalImage||item.image;img.alt=item.title;if(item.type==='books'&&item.imageClip)img.style.clipPath=item.imageClip;media.append(img);$('#detailTitle').textContent=item.title;$('#detailType').textContent=labels[item.type]+' / '+item.category;const copy=$('#detailCopy');copy.replaceChildren();if(item.overview){if(item.overview.authors){const p=document.createElement('p');p.textContent=item.overview.authors+(item.overview.publisher?' · '+item.overview.publisher:'');copy.append(p);}for(const text of item.overview.paragraphs||[]){const p=document.createElement('p');p.textContent=text;copy.append(p);}}else{const p=document.createElement('p');p.textContent=item.category;copy.append(p);}$('#original').href=item.originalImage||item.image;if(!dialog.open)dialog.show();dialog._origin=button;}
 $('#close').onclick=()=>dialog.close();dialog.addEventListener('close',()=>dialog._origin?.focus({preventScroll:true}));document.addEventListener('keydown',e=>{if(e.key==='Escape'&&dialog.open){dialog.close();return;}if(e.key==='Escape'&&!dialog.open&&mode==='category')returnSphere();if(mode!=='intro'&&['ArrowLeft','ArrowRight','ArrowUp','ArrowDown'].includes(e.key)){e.preventDefault();yaw+=(e.key==='ArrowLeft'?-.12:e.key==='ArrowRight'?.12:0);pitch+=(e.key==='ArrowUp'?-.1:e.key==='ArrowDown'?.1:0);}});
 window.addEventListener('pointermove',e=>{pointerX=(e.clientX/space.clientWidth-.5)*2;pointerY=(e.clientY/space.clientHeight-.5)*2;});document.documentElement.addEventListener('pointerleave',()=>{pointerX=pointerY=0;});space.addEventListener('wheel',e=>{if(mode==='category'){e.preventDefault();scrollTarget+=e.deltaY*.00075;}},{passive:false});let touchY=0;space.addEventListener('touchstart',e=>{touchY=e.touches[0].clientY;},{passive:true});space.addEventListener('touchmove',e=>{if(mode==='category'){const y=e.touches[0].clientY;scrollTarget+=(touchY-y)*.002;touchY=y;}},{passive:true});space.addEventListener('pointerdown',e=>{moved=false;if(mode==='intro'||dialog.open)return;drag={x:e.clientX,y:e.clientY,id:e.pointerId};space.classList.add('dragging');});window.addEventListener('pointermove',e=>{if(!drag)return;const dx=e.clientX-drag.x,dy=e.clientY-drag.y;if(Math.abs(dx)+Math.abs(dy)>3)moved=true;if(mode==='category')scrollTarget-=dy*.003;yaw+=dx*.005;pitch=Math.max(-1,Math.min(1,pitch+dy*.004));drag.x=e.clientX;drag.y=e.clientY;});function end(){drag=null;space.classList.remove('dragging');}window.addEventListener('pointerup',end);window.addEventListener('pointercancel',end);window.addEventListener('blur',end);
-function frame(now){requestAnimationFrame(frame);if(!ready||document.hidden||portalLeaving)return;if(!start)start=now;const dt=Math.min(40,now-(last||now));last=now;if(!reduced&&!dialog.open&&!drag)clock+=dt;const w=space.clientWidth,h=space.clientHeight,M=Math.min(w,h),R=M*.72,f=M*1.065,seconds=(now-start)/1000;
+function frame(now){requestAnimationFrame(frame);if(!ready||document.hidden||portalLeaving)return;if(!start)start=now;const dt=Math.min(40,now-(last||now));last=now;if(!reduced&&!dialog.open&&!drag)clock+=dt;const w=space.clientWidth,h=space.clientHeight,M=Math.min(w,h),mob=w<650,camEnd=mob?1.5:3.15,R=M*.72,f=M*1.065,seconds=(now-start)/1000;
 const smooth=1-Math.exp(-dt/180);parallaxX+=(pointerX-parallaxX)*smooth;parallaxY+=(pointerY-parallaxY)*smooth;scroll+=(scrollTarget-scroll)*smooth;
 if(mode==='intro'&&(seconds>=6.05||reduced))mode='sphere';if(!drag&&!reduced&&!dialog.open&&!transition&&mode==='sphere')yaw+=dt*.000025;
 if(transition){const t=clamp((now-transition)/(reduced?1:2900));mix=lerp(from,to,ease(t));if(t===1)transition=0;}
@@ -30,7 +30,7 @@ const portal=document.querySelector('#archiveNext');if(portal)portal.hidden=mode
 const intro=mode==='intro',burst=intro?ease(clamp((seconds-1.5)/.95)):1;
 // Camera retreat and centre-axis rotation happen together during sphere formation.
 const travel=intro?ease(clamp((seconds-2.75)/3.3)):1;
-const cameraZ=intro?R*lerp(1.85,3.15,travel):3.15*R*(1-mix);
+const cameraZ=intro?R*lerp(1.85,camEnd,travel):camEnd*R*(1-mix);
 // 240 degrees around an axis tilted 40 degrees through the sphere centre.
 const turn=(reduced?1:ease(clamp((seconds-2.35)/3.7)))*Math.PI*4/3;
 const ax=Math.sin(40*Math.PI/180),ay=Math.cos(40*Math.PI/180),ct=Math.cos(turn),st=Math.sin(turn);
@@ -38,16 +38,16 @@ const viewPitch=pitch+scroll*(intro?0:mix);const cy=Math.cos(yaw),sn=Math.sin(ya
 items.forEach((item,i)=>{if(item.categoryExtra&&(intro||mix===0||item.type!==selected)){if(!item.culled){item.el.style.visibility='hidden';item.el.style.pointerEvents='none';item.el.tabIndex=-1;item.culled=true;}return;}item.culled=false;const q=item.point,dot=ax*q[0]+ay*q[1];const p=[q[0]*ct+ay*q[2]*st+ax*dot*(1-ct),q[1]*ct-ax*q[2]*st+ay*dot*(1-ct),q[2]*ct+(ax*q[1]-ay*q[0])*st];let x=(p[0]*cy+p[2]*sn)*R,z=(-p[0]*sn+p[2]*cy)*R,y=p[1]*R;const yy=y*cp-z*sp;z=y*sp+z*cp;y=yy;
 // V2 camera approach to stable, staggered positions on a broad curved surface.
 const slot=item.layoutIndex||0,columns=w<650?3:5,rows=Math.ceil((item.layoutCount||1)/columns);
-const spanX=w*2.12,spanY=Math.max(h*1.24,rows*h*.39),phase=clock/1000*.009+scroll*.28;
+const spanX=w*(mob?1.6:2.12),spanY=Math.max(h*(mob?1.1:1.24),rows*h*(mob?.3:.39)),phase=clock/1000*.009+scroll*.28;
 const column=slot%columns,row=Math.floor(slot/columns),offset=(row%2)*.46+.14*Math.sin(row*2.1);
 const u=((column+offset)/columns+phase%1+1)%1-.5;
-const gx=u*spanX,gy=((((row+.5)/rows+scroll*.22+clock/1000*.0025)%1+1)%1-.5)*spanY+Math.sin(column*2.4)*h*.16;
+const gx=u*spanX,gy=((((row+.5)/rows+scroll*.22+clock/1000*.0025)%1+1)%1-.5)*spanY+Math.sin(column*2.4)*h*(mob?.1:.16);
 const depth=R*(1.6+.20*Math.pow(u*2,2)+.06*Math.sin(slot*2.3));
 if(!intro&&mix>0){x=lerp(x,gx*depth/f,mix);y=lerp(y,gy*depth/f,mix);z=lerp(z,-depth,mix);}
 const distance=cameraZ-z,near=R*.055,projection=f/Math.max(near,distance);
 let sx=w/2+x*projection,sy=h/2+y*projection;
 // Constant world sizes after the opening burst; perspective alone changes their apparent size.
-const worldSize=M*.23*.7*(.91+.16*(.5+.5*Math.sin(i*19.1)));let size=lerp(worldSize,Math.min(w*(w<650?.31:.19),h*(item.type==='images'?.37:item.type==='documents'?.25:.29))*(.88+.20*(.5+.5*Math.sin(slot*8.3)))*depth/f,intro?0:mix)*projection,opacity=clamp((distance-near)/(R*.12));
+const worldSize=M*.23*.7*(.91+.16*(.5+.5*Math.sin(i*19.1)));let size=lerp(worldSize,Math.min(w*(mob?.33:.19),h*(item.type==='images'?.37:item.type==='documents'?.25:.29))*(.88+.20*(.5+.5*Math.sin(slot*8.3)))*depth/f,intro?0:mix)*projection,opacity=clamp((distance-near)/(R*.12));
 const active=item.type===selected;
 if(intro){const rank=item.introRank,reveal=rank<0?ease(clamp((seconds-1.6)/.6)):ease(clamp((seconds-rank*.125)/.15));const stackSize=M*.19,stackX=w/2+Math.sin(Math.max(0,rank)*2.3)*7,stackY=h/2+Math.cos(Math.max(0,rank)*2.3)*5;
 // The burst establishes the shell once; it never becomes a flat gallery.
@@ -59,7 +59,7 @@ const strength=.65+Math.min(2,projection)*.35;sx-=parallaxX*12*strength;sy-=para
 if(!intro&&mix>0){
  const origin=item.flightOrigin||{x:w/2,y:h/2,size:M*.1,opacity:1};
  const targetX=w/2+gx-parallaxX*12,targetY=h/2+gy-parallaxY*9;
- const targetSize=Math.min(w*(w<650?.31:.19),h*(item.type==='images'?.37:item.type==='documents'?.25:.29))*(.88+.20*(.5+.5*Math.sin(slot*8.3)));
+ const targetSize=Math.min(w*(mob?.33:.19),h*(item.type==='images'?.37:item.type==='documents'?.25:.29))*(.88+.20*(.5+.5*Math.sin(slot*8.3)));
  const angle=mix*.72,c=Math.cos(angle),s=Math.sin(angle);
  const dx=origin.x-entryFocus.x,dy=origin.y-entryFocus.y;
  const pivotX=lerp(entryFocus.x,w/2,mix),pivotY=lerp(entryFocus.y,h/2,mix);

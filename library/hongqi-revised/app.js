@@ -152,11 +152,13 @@ function render(p){
 }
 function resize(){unit=Math.max(1300,innerHeight*1.75);$('#track').style.height=(unit*(states.length-.01)+innerHeight)+'px';measureText()}
 function go(i){window.scrollTo({top:(i+.66)*unit,behavior:reduced?'instant':'smooth'})}
-function tick(now){const dt=Math.min(50,now-(last||now));last=now;const target=clamp(scrollY/unit,0,states.length-.01);progress=reduced?target:mix(progress,target,1-Math.exp(-dt/115));px=mix(px,mx,.07);py=mix(py,my,.07);render(progress);requestAnimationFrame(tick)}
+function tick(now){if(mobileLayout.matches){requestAnimationFrame(tick);return}const dt=Math.min(50,now-(last||now));last=now;const target=clamp(scrollY/unit,0,states.length-.01);progress=reduced?target:mix(progress,target,1-Math.exp(-dt/115));px=mix(px,mx,.07);py=mix(py,my,.07);render(progress);requestAnimationFrame(tick)}
 // Reading zones slow input continuously; no rounded landing point can trap later wheel events.
+const mobileLayout = matchMedia('(max-width:760px)');
 let wheelTarget=null;
 window.addEventListener('scroll',()=>{if(wheelTarget!==null&&Math.abs(scrollY-wheelTarget)>2)wheelTarget=null},{passive:true});
 window.addEventListener('wheel',e=>{
+ if (mobileLayout.matches) return;
  if(document.body.classList.contains('in-directory')){e.preventDefault();return}if($('#gallery').open||$('#chapter-dialog').open||e.ctrlKey)return;
  const d=e.deltaY*(e.deltaMode===1?16:e.deltaMode===2?innerHeight:1);if(!d)return;
  e.preventDefault();
@@ -166,12 +168,18 @@ window.addEventListener('wheel',e=>{
  wheelTarget=clamp(origin+d*gain,0,(states.length-.01)*unit);
  window.scrollTo({top:wheelTarget,behavior:'instant'});
 },{passive:false});
-window.addEventListener('keydown',e=>{if($('#gallery').open||$('#chapter-dialog').open)return;if(['ArrowDown','PageDown','ArrowUp','PageUp'].includes(e.key)){e.preventDefault();go(clamp(current+(e.key.endsWith('Down')?1:-1),0,states.length-1))}});
+window.addEventListener('keydown',e=>{if(mobileLayout.matches)return;if($('#gallery').open||$('#chapter-dialog').open)return;if(['ArrowDown','PageDown','ArrowUp','PageUp'].includes(e.key)){e.preventDefault();go(clamp(current+(e.key.endsWith('Down')?1:-1),0,states.length-1))}});
 function showInfo(o){activeGhost=o;selected=o.key;const box=$('#info-card');box.querySelector('img').src=A[o.key].src;box.querySelector('p').textContent=captions[o.key];box.querySelector('small').textContent=`《红旗：一部轿车的设计使命》 · 第${o.chapter===2?'二':'三'}章第一节`;box.classList.add('visible');document.querySelectorAll('#chapters button').forEach(b=>b.classList.toggle('selected',+b.dataset.chapter===o.chapter));}
 $('#info-close').onclick=()=>{$('#info-card').classList.remove('visible');activeGhost=null;$('#chapter-link').style.opacity=0;document.querySelectorAll('#chapters button').forEach(b=>b.classList.remove('selected'))};
 for(const[key,a]of Object.entries(A)){const b=document.createElement('button');const im=new Image();im.src=a.src;im.alt=captions[key];b.append(im);b.dataset.key=key;b.onclick=()=>select(key);$('#thumbnails').append(b)}
 function select(key){selected=key;$('#large').src=A[key].src;$('#large').alt=captions[key];$('#caption').textContent=captions[key]+' · 《红旗：一部轿车的设计使命》';document.querySelectorAll('#thumbnails button').forEach(b=>b.classList.toggle('active',b.dataset.key===key))}
-function openGallery(key){select(key);$('#gallery').showModal()}$('#gallery-open').onclick=()=>openGallery(selected);$('#close').onclick=()=>$('#gallery').close();$('#locate').onclick=()=>{$('#gallery').close();const i=states.findIndex(s=>s.ims[selected]);if(i>=0)go(i);else openChapter(2)};
+function openGallery(key){select(key);$('#gallery').showModal()}$('#gallery-open').onclick=()=>openGallery(selected);$('#close').onclick=()=>$('#gallery').close();$('#locate').onclick=()=>{$('#gallery').close();if (mobileLayout.matches) {
+ const image = document.querySelector('#hq-mobile [data-gallery-key="'+selected+'"]');
+ if (image) { image.scrollIntoView({block:'center'}); image.focus({preventScroll:true}); }
+ else openChapter(2);
+ return;
+}
+const i=states.findIndex(s=>s.ims[selected]);if(i>=0)go(i);else openChapter(2)};
 const chapterNames=['序曲 · 共和国长子','发轫 · 设计与研发','演进 · 红旗的谱系化','转型 · 量产国民车','未来 · 风卷红旗如画'];
 chapterNames.forEach((name,i)=>{let b=document.createElement('button');b.dataset.chapter=i+1;b.innerHTML=`<span>0${i+1}</span> ${name}<i></i>`;b.onclick=()=>openChapter(i+1);$('#chapters').append(b)});
 chapterRows=window.CHAPTER_ROWS||[];
@@ -179,6 +187,7 @@ function openChapter(chapter,section){const target=$('#chapter-content');target.
 $('#chapter-close').onclick=()=>$('#chapter-dialog').close();$('#next-section').onclick=()=>openChapter(3,'3.2');
 window.hongqiReady=Promise.all([document.fonts.ready,...['fleet'].map(key=>new Promise(resolve=>{const image=new Image();image.onload=()=>{if(image.decode)image.decode().catch(()=>{}).then(resolve);else resolve()};image.onerror=resolve;image.src=A[key].src;}))]);
 window.hongqiEnter=()=>{window.scrollTo({top:0,behavior:'instant'});progress=0;wheelTarget=null;render(0);};window.hongqiChapter=openChapter;
+window.hongqiOpenGallery=(key=selected)=>openGallery(key);
 window.addEventListener('resize',resize);resize();render(0);requestAnimationFrame(tick);
 })();
 

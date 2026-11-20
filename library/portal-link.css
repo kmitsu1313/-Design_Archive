@@ -1,1 +1,30 @@
 .site-header nav .sphere-return{flex:0 0 36px;width:36px;height:40px;margin-left:-18px;padding:2px;border:0;background:transparent;color:#777;cursor:pointer;transition:color .25s,transform .4s}.sphere-return svg{display:block;width:100%;height:100%}.site-header nav .sphere-return:hover{color:#222;transform:rotate(-8deg)}.sphere-return:focus-visible{outline:1px solid #999;outline-offset:4px;border-radius:4px}@media(max-width:600px){.site-header nav .sphere-return{flex-basis:27px;width:27px;height:32px;margin-left:-8px}}
+
+/* 手机竖屏：头部一行装不下 logo + 三个导航 + 检索 + 返回，整体收窄避免右侧溢出 */
+@media(max-width:600px){
+  .site-header{padding:0 4%!important}
+  .site-header .brand7 .drc-logo24{width:132px}
+  .site-header nav{gap:10px;font-size:12.5px}
+  .site-header nav a{white-space:nowrap}
+  .site-header .search-trigger7{width:30px;padding:0;background:transparent}
+  .site-header .search-trigger7 svg{width:20px;height:20px}
+  .site-header nav .sphere-return{flex-basis:24px;width:24px;height:28px;margin-left:0}
+}
+/* 手机端书架：书与间距同按屏高计算，任何机型都不重叠，一屏正好露出 3 本 */
+@media(max-width:600px){:root{--step9:18.5svh}.shelf9 .shelf-item7{height:18svh!important}}
+
+/* 手机端书库年轮：书卡缩小上移，信息条与切换按钮上下分层、不再重叠 */
+@media(max-width:600px){
+body.library-reference23 .orbit8{min-height:0}
+body.library-reference23 .orbit8 .orbit-card8{--mm12:.78px;--run12:70px;left:45%;top:38%;transform:translate3d(calc(-50% + var(--offset8)*var(--run12)),calc(-50% - var(--offset8)*66px),0)!important}
+body.library-reference23 #orbit-info8{left:5%;right:5%;width:auto;bottom:78px;padding-top:12px}
+body.library-reference23 #orbit-info8 h3{font-size:14px;margin:8px 0}
+body.library-reference23 .orbit-controls8{left:0;right:0;bottom:14px;gap:44px}
+}
+
+/* 手机端书架：压缩书架上方留白，书上移 */
+@media(max-width:600px){.shelf9 .shelf-space7{height:52svh;min-height:380px}.shelf9 .shelf-item7{bottom:20%!important}}
+
+/* 全站隐藏滚动条：保留滚动能力，仅隐藏滚动条视觉，避免破坏排版 */
+html{scrollbar-width:none}
+::-webkit-scrollbar{width:0!important;height:0!important}

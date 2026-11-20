@@ -32,3 +32,9 @@
 #detailMedia{background:transparent}#detailMedia img{mix-blend-mode:multiply;background:transparent}
 .tile{visibility:hidden;contain:layout style;backface-visibility:hidden}
 @media(max-width:800px){.sphere-brand{width:207px}}@media(max-width:600px){.sphere-brand{width:195.5px;left:5%;top:42px}.sphere-menu{right:5%;top:22px}}
+
+/* 全站隐藏滚动条：保留滚动能力，仅隐藏滚动条视觉，避免破坏排版 */
+html{scrollbar-width:none}
+::-webkit-scrollbar{width:0!important;height:0!important}
+#space{scrollbar-width:none}
+#space::-webkit-scrollbar{width:0!important;height:0!important}

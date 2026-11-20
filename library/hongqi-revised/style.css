@@ -43,3 +43,100 @@ html{overflow-y:scroll;scrollbar-gutter:stable}
 #chapter-cover.leaving .chapter-strip{animation-duration:.46s;animation-delay:calc(var(--i)*.05s)}
 #chapter-cover.text-leaving19 .directory-heading13,#chapter-cover.text-leaving19 .directory-hint13{transition-duration:.18s}
 #pictures{translate:0 0}
+
+/* 手机端章节目录：按拼接图原始比例(1403×1121)精确切分五条竖条，图片不再被压扁/拉伸 */
+@media(max-width:700px){
+#chapter-cover{gap:6px;padding:0 6vw;align-items:center}
+.chapter-strip,.chapter-strip:nth-child(2),.chapter-strip:nth-child(4){height:calc(88vw/1.252);align-self:center;flex:none}
+.chapter-strip img{width:88vw;height:100%;object-fit:fill;object-position:center;left:calc(var(--i)*(((24px - 88vw)/5) - 6px));top:0}
+.directory-heading13{top:18px}
+.directory-hint13{display:none}
+}
+
+/* 手机端故事页：纵向滚动叙事，保留原版的下滑视差与悬浮入场（内容来自同一数据源） */
+#hq-mobile{display:none}
+.in-directory #hq-mobile{display:none!important}
+@media(max-width:760px){
+#viewport,#bottom,#nodes,#chapters,#start-hint,#next-section,#chapter-link,#info-card,#directory-return{display:none!important}
+#track{display:none!important}
+body:before{opacity:.27}
+#hq-mobile{display:block;padding:15vh 7% 22vh;background:#f7f6f2;min-height:100vh;color:#3c3a36;overflow-x:clip}
+.hqm-head p{margin:0;font-size:12px;color:#8c877f}
+.hqm-head h1{font-size:22px;font-weight:500;margin:8px 0 6px;color:#252321}
+.hqm-tip{color:#a09a90!important}
+.hqm-head{padding-bottom:9vh}
+/* 大红年份：随滚动缓慢漂移，衬在内容后方（对应桌面端左上角的红色年份） */
+.hqm-scene{position:relative;padding:11vh 0 13vh}
+.hqm-year{position:absolute;top:2vh;left:-3vw;z-index:0;font-family:Han,sans-serif;font-size:clamp(84px,26vw,128px);font-weight:700;line-height:.9;color:#cd4933;opacity:.18;pointer-events:none;will-change:transform}
+.hqm-scene>*:not(.hqm-year){position:relative;z-index:1}
+/* 悬浮入场：元素进入视口时浮起显现 */
+.hqm-float{opacity:0;transform:translateY(30px);transition:opacity .85s ease,transform .85s cubic-bezier(.22,1,.36,1)}
+.hqm-float.on{opacity:1;transform:none}
+.hqm-kicker{font-size:11px;letter-spacing:2px;color:#c8462c;margin:0 0 8px}
+.hqm-scene h2{font-size:19px;font-weight:500;margin:0 0 14px;color:#252321}
+.hqm-scene>p{font-size:15px;line-height:1.9;margin:0 0 12px;color:#4a4741}
+.hqm-scene figure{margin:20px 0;background:#fff;padding:10px;box-shadow:0 2px 10px rgba(0,0,0,.06)}
+.hqm-scene img{width:100%;height:auto;display:block;will-change:transform}
+.hqm-scene figcaption{font-size:11px;color:#8c877f;margin-top:8px}
+/* 底部年份进度条：对应桌面端的年份数字 + 小车时间轴 */
+#hqm-progress{position:fixed;left:0;right:0;bottom:0;display:flex;align-items:center;gap:12px;z-index:60;font-size:11px;color:#8c877f;pointer-events:none;background:#f7f6f2e0;backdrop-filter:blur(10px);padding:12px 6% calc(12px + env(safe-area-inset-bottom));border-top:1px solid #e2dfd7}
+.hqm-prog-year{font-family:Han,sans-serif;font-weight:700;font-size:13px;color:#c8462c;min-width:38px}
+.hqm-prog-rail{position:relative;flex:1;height:1px;background:#d8d4cb}
+.hqm-prog-rail i{position:absolute;left:0;top:0;height:100%;width:6%;background:#c8462c;transition:width .5s ease}
+.hqm-prog-rail b{position:absolute;left:6%;top:-9px;width:26px;transform:translateX(-50%);transition:left .5s ease;color:#c8462c}
+.hqm-prog-rail b svg{display:block;width:100%;height:auto}
+.hqm-prog-idx{min-width:44px;text-align:right}
+}
+@media(max-width:760px) and (prefers-reduced-motion:reduce){
+.hqm-float{opacity:1;transform:none;transition:none}
+}
+
+/* 手机端叙事增强：排版随下滑变换 + 方框聚焦细节对比（还原桌面端体验） */
+@media(max-width:760px){
+/* 跨页绘图幕（08）：奶油底色，宽图随下滑横向平移浏览 */
+.hqm-scene.hqm-spread{background:#e8dbb2;margin-left:-7%;margin-right:-7%;padding-left:7%;padding-right:7%}
+.hqm-spread figure{background:transparent;padding:0;box-shadow:none}
+.hqm-panfig{overflow:hidden}
+.hqm-panfig img{width:185%!important;max-width:none;height:auto}
+.hqm-panfig figcaption{padding-top:8px}
+/* 暗色聚焦幕（09A/09B）：深色底、浅色文字，对应桌面端的深色场景 */
+.hqm-scene.hqm-dark{background:#242626;color:#d8d6d1;margin-left:-7%;margin-right:-7%;padding-left:7%;padding-right:7%}
+.hqm-dark h2{color:#e1e1de!important}
+.hqm-dark>p{color:#b9b7b2!important}
+.hqm-dark .hqm-kicker{color:#e0694f}
+.hqm-dark .hqm-year{color:#cd4933;opacity:.22}
+.hqm-dark figure{background:transparent;padding:0;box-shadow:none}
+.hqm-dark figcaption{color:#8f8d88}
+/* 方框聚焦：图越靠近视口中心越暗化，细节区域保持明亮并描框（--reveal 由滚动驱动） */
+.hqm-focuswrap{position:relative;overflow:hidden}
+.hqm-focuswrap img{display:block;width:100%;height:auto}
+.hqm-focuswrap>img{filter:brightness(calc(1 - var(--reveal,0)*.55))}
+.hqm-focuswrap .hqm-bright{position:absolute;inset:0;clip-path:inset(var(--fy) calc(100% - var(--fx) - var(--fw)) calc(100% - var(--fy) - var(--fh)) var(--fx));opacity:var(--reveal,0)}
+.hqm-box{position:absolute;left:var(--fx);top:var(--fy);width:var(--fw);height:var(--fh);border:1.5px solid #cd4933;opacity:var(--reveal,0);box-shadow:0 0 0 1px rgba(255,255,255,.28);transform:scale(calc(1 + (1 - var(--reveal,0))*.05));transform-origin:center;pointer-events:none}
+/* 多图幕：左右错落排版，随下滑逐张切换构图 */
+.hqm-fig--left{width:82%;margin-left:0!important;margin-right:auto!important}
+.hqm-fig--right{width:82%;margin-left:auto!important;margin-right:0!important}
+/* 引语幕（11）：红字大排版，灰字收尾 */
+.hqm-scene.hqm-quote>p{font-size:16px!important;color:#c8462c!important;font-weight:500;line-height:1.85}
+.hqm-scene.hqm-quote>p.hqm-note{color:#8c877f!important;font-weight:400;font-size:13.5px!important}
+}
+@media(max-width:760px) and (prefers-reduced-motion:reduce){
+.hqm-focuswrap>img{filter:brightness(.45)}
+.hqm-focuswrap .hqm-bright,.hqm-box{opacity:1}
+}
+
+/* 全站隐藏滚动条：保留滚动能力，仅隐藏滚动条视觉，避免破坏排版 */
+html{scrollbar-width:none}
+::-webkit-scrollbar{width:0!important;height:0!important}
+
+@media (max-width:760px) {
+ .hqm-actions { display:flex; gap:12px; margin-top:18px }
+ .hqm-actions button, #hq-mobile > button { min-height:44px; border:1px solid #b8b3aa; background:transparent; padding:0 14px; color:inherit }
+ .hqm-enlarge { position:absolute; inset:0; z-index:2; background:none; border:0; color:transparent; cursor:zoom-in }
+ .hqm-enlarge:focus-visible { outline:2px solid #b44a36; outline-offset:-2px }
+}
+@media (max-width:760px) and (prefers-reduced-motion:reduce) {
+ #hq-mobile [data-plx], .hqm-panfig img { transform:none!important }
+ .hqm-panfig img { width:100%!important }
+ #hqm-progress * { transition:none }
+}
