@@ -4,6 +4,8 @@ function shelfPose9(el, n) {
   const previous = el.style.getPropertyValue('--slot9');
   const wraps = previous !== '' && Math.abs(n - Number(previous)) > referenceBooks.length / 2;
   if (wraps) el.classList.add('shelf-wrap');
+  // At 17vw per slot, the fifth slot is already entirely outside the desktop shelf.
+  el.classList.toggle('shelf-offscreen', Math.abs(n) >= 5);
 
   el.style.setProperty('--slot9', n);
   el.style.setProperty('--scale9', n === 0 ? 1.13 : Math.abs(n) === 1 ? .97 : 1);

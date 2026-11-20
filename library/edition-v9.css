@@ -13,3 +13,5 @@ body.detail-mode9 .search-trigger7{background:#0000000c!important;mix-blend-mode
 
 .shelf9.dragging .shelf-item7{transition-duration:0s!important}
 .shelf9 .shelf-item7.shelf-wrap{transition:none!important}
+
+.shelf9 .shelf-item7.shelf-offscreen{visibility:hidden;opacity:0!important;transition:none!important}
