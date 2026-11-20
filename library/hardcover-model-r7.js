@@ -61,7 +61,12 @@ mesh8=function(canvas,d){
    faces.push({p,layer:front?2:0,solid:true,u:0,width:1,light:i===2?1:.9});
   }
  }
- function project(p){const [a,b,c]=p,rx=a*Math.cos(angle)+c*Math.sin(angle),rz=-a*Math.sin(angle)+c*Math.cos(angle),ry=b*Math.cos(tilt)-rz*Math.sin(tilt),depth=3-(b*Math.sin(tilt)+rz*Math.cos(tilt));return [(rx*5.65/aspect/3+1)*canvas.width/2,(1-ry*5.65/3)*canvas.height/2,depth];}
+ const sinA=Math.sin(angle),cosA=Math.cos(angle),sinT=Math.sin(tilt),cosT=Math.cos(tilt);
+ const halfWidth=x+.014,halfDepth=z+.003;
+ const extentX=halfWidth*Math.abs(cosA)+halfDepth*Math.abs(sinA);
+ const extentY=y*Math.abs(cosT)+(halfWidth*Math.abs(sinA)+halfDepth*Math.abs(cosA))*Math.abs(sinT);
+ const scale=Math.min(5.65/3,.99*aspect/extentX,.99/extentY);
+ function project(p){const [a,b,c]=p,rx=a*cosA+c*sinA,rz=-a*sinA+c*cosA,ry=b*cosT-rz*sinT,depth=3-(b*sinT+rz*cosT);return [(rx*scale/aspect+1)*canvas.width/2,(1-ry*scale)*canvas.height/2,depth];}
  function at(points,u,v){return project(points[0].map((_,i)=>(1-u)*(1-v)*points[0][i]+u*(1-v)*points[1][i]+u*v*points[2][i]+(1-u)*v*points[3][i]));}
  function path(points){ctx.beginPath();points.forEach((p,i)=>i?ctx.lineTo(p[0],p[1]):ctx.moveTo(p[0],p[1]));ctx.closePath();}
  function triangle(source,s,t){
@@ -80,12 +85,18 @@ mesh8=function(canvas,d){
   });
   ctx.save();path(expanded);ctx.clip();ctx.setTransform(m[0],n[0],m[1],n[1],m[2],n[2]);ctx.drawImage(source,0,0);ctx.restore();
  }
- return texture8(asset7(d)).then(im=>{
+ const texture=canvas.closest('.continuous-book-r7')?shelfAtlas7(d):asset7(d);
+ function paint(im){
   if(!canvas.isConnected||canvas._paintRevision!==revision)return;
   if(canvas.width!==renderWidth||canvas.height!==renderHeight){canvas.width=renderWidth;canvas.height=renderHeight;}else ctx.clearRect(0,0,canvas.width,canvas.height);ctx.imageSmoothingEnabled=true;ctx.imageSmoothingQuality='high';
   const paper=document.createElement('canvas');paper.width=256;paper.height=512;const pc=paper.getContext('2d');pc.fillStyle='#f1eddf';pc.fillRect(0,0,256,512);for(let i=0;i<256;i+=2){pc.fillStyle=i%6?'#e7e2d6':'#d9d2c3';pc.fillRect(i,0,.5,512);}const pg=pc.createLinearGradient(0,0,256,0);pg.addColorStop(0,'#00000018');pg.addColorStop(.2,'#ffffff10');pg.addColorStop(1,'#00000010');pc.fillStyle=pg;pc.fillRect(0,0,256,512);
   const binding=document.createElement('canvas');binding.width=64;binding.height=512;const bc=binding.getContext('2d');bc.fillStyle=d.accent||d.bg||'#66574d';bc.fillRect(0,0,64,512);
-  faces.sort((a,b)=>(a.layer??1)-(b.layer??1)||b.p.reduce((sum,p)=>sum+project(p)[2],0)-a.p.reduce((sum,p)=>sum+project(p)[2],0));
+  // The paper sits between the two boards. Their near/far order reverses
+  // when viewed from behind. The spine is nearest only on the binding side.
+  const frontNear=cosA*cosT>=0;
+  const spineNear=-sinA*cosT>0;
+  const layerOrder=[frontNear?0:2,1,frontNear?2:0,spineNear?3:-1];
+  faces.sort((a,b)=>layerOrder[a.layer]-layerOrder[b.layer]||b.p.reduce((sum,p)=>sum+project(p)[2],0)-a.p.reduce((sum,p)=>sum+project(p)[2],0));
   function facing(f){
    const rotate=p=>{const rx=p[0]*Math.cos(angle)+p[2]*Math.sin(angle),rz=-p[0]*Math.sin(angle)+p[2]*Math.cos(angle);return [rx,p[1]*Math.cos(tilt)-rz*Math.sin(tilt),p[1]*Math.sin(tilt)+rz*Math.cos(tilt)];};
    const p=f.p.map(rotate),u=p[1].map((v,i)=>v-p[0][i]),v=p[2].map((v,i)=>v-p[0][i]),n=[u[1]*v[2]-u[2]*v[1],u[2]*v[0]-u[0]*v[2],u[0]*v[1]-u[1]*v[0]],center=p[0].map((_,i)=>p.reduce((s,a)=>s+a[i],0)/4);
@@ -102,8 +113,27 @@ mesh8=function(canvas,d){
    if(f.light<1){ctx.fillStyle=`rgba(0,0,0,${1-f.light})`;path(f.p.map(project));ctx.fill();}
    ctx.restore();
   }
+  if(canvas.closest('.shelf-item7')){
+   let light=canvas.parentElement.querySelector('.book-edge-light');
+   if(!light){
+    light=document.createElement('canvas');
+    light.className='book-edge-light';
+    light.setAttribute('aria-hidden','true');
+    canvas.after(light);
+   }
+   light.width=canvas.width;light.height=canvas.height;
+   const mask=light.getContext('2d');
+   mask.drawImage(canvas,0,0);
+   mask.globalCompositeOperation='source-in';
+   mask.fillStyle='white';
+   mask.fillRect(0,0,light.width,light.height);
+  }
   canvas.dataset.rendered='true';canvas.dataset.modelEdition='hardcover';canvas.dataset.faceCount=String(faces.length);
- }).catch(()=>{canvas.parentElement.innerHTML=flat8(d);});
+ }
+ if(canvas.closest('.detail-object7')&&!canvas.dataset.rendered){
+  texture8(shelfAtlas7(d)).then(im=>{if(!canvas.dataset.rendered)paint(im);});
+ }
+ return texture8(texture).then(paint).catch(()=>{if(canvas.isConnected&&canvas._paintRevision===revision)canvas.parentElement.innerHTML=flat8(d);});
 };
 
 render7();
