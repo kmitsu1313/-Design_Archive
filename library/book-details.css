@@ -29,3 +29,9 @@
 .detail7 .reader-avatar.face-avatar svg{width:26px;height:26px;fill:none}
 
 
+
+/* Keep the review face centered on the first text line, including fallback reviews. */
+.detail7 .reader-entry{align-items:start;font-size:16px;line-height:2}
+.detail7 .book-detail-content .reader-entry{font-size:14px;line-height:1.95}
+.detail7 .reader-entry>.reader-avatar{margin-top:calc((1lh - 26px)/2)}
+.detail7 .reader-entry>:last-child>p:first-child{margin-top:0}
