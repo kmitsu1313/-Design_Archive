@@ -104,3 +104,7 @@ html.book-color-root,body.book-color-mode{background:var(--book-paper);color:var
 @media(max-width:359px){.spine-intro{--entry-width:104px;gap:16px}.spine-intro h1{font-size:22px}.spine-intro .subtitle{font-size:13px}.spine-intro .eyebrow{font-size:9px}}
 @media(min-width:620px){.spine-intro{--entry-width:200px;gap:35px}.spine-intro h1{font-size:34px}.spine-intro .detail-actions{grid-column:2;margin-top:-45px;align-self:end}}
 @media(prefers-reduced-motion:reduce){*,*:before,*:after{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
+
+.site-header .brand { min-width:0; flex:0 1 244px }
+.sphere-link { flex:none; margin-left:auto; padding:12px 6px; font-size:12px; white-space:nowrap }
+.site-header .icon-button { flex:none }
