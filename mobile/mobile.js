@@ -188,9 +188,11 @@
     const intro=d.intro?.length?d.intro:[b.description];
     const paragraphs=lines=>lines.map(p=>`<p>${esc(p)}</p>`).join('');
     const metaRows=[['作者',meta['作者']||b.author],['出版年份',meta['出版年']||b.year],['出版机构',meta['出版社']||b.publisher],['ISBN',meta.ISBN],['装帧',meta['装帧']],['页数',meta['页数']],['定价',meta['定价']]].filter(([,v])=>v);
+    const stories = {hongqi:['hongqi-revised/index.html','进入红旗设计手稿'], wendao:['wendao/index.html','进入问道 · 图像叙事']};
+    const story = stories[b.id];
     const isSaved=saved.includes(b.id);
     return `<div style="--book-paper:${b.bg};--book-ink:${b.ink}"><div class="detail-top" style="color:var(--book-ink)"><a class="back-link" href="#${returnRoute}">${svg('back')}返回${returnRoute==='desk'?'阅览台':returnRoute==='library'?'书库':'书架'}</a><span class="eyebrow" style="color:inherit;opacity:.8">${number(books.indexOf(b)+1)} / DESIGN LITERATURE</span></div>${fromSpine?'':`<div class="detail-stage">${volume(b)}</div>`}</div>
-      <div class="detail-title ${fromSpine?'spine-intro':''}">${fromSpine?`<div class="detail-entry-cover" style="--entry-ratio:${b.width*(1-b.split)/b.height+.12}">${volume(b)}</div>`:''}<div class="detail-entry-copy"><p class="eyebrow">${esc(theme(b))} / DESIGN ARCHIVE</p><h1>${esc(b.title)}</h1><p class="author">${esc(meta['作者']||b.author)}</p><p class="subtitle">${esc(b.subtitle)}</p></div><div class="detail-actions"><button class="button ${isSaved?'outline':''}" data-action="save" data-id="${b.id}" aria-pressed="${isSaved}">${svg(isSaved?'check':'plus')}<span>${isSaved?'已加入阅览台':'加入阅览台'}</span></button><a class="button outline" href="#desk">查看阅览台</a></div></div>
+      <div class="detail-title ${fromSpine?'spine-intro':''}">${fromSpine?`<div class="detail-entry-cover" style="--entry-ratio:${b.width*(1-b.split)/b.height+.12}">${volume(b)}</div>`:''}<div class="detail-entry-copy"><p class="eyebrow">${esc(theme(b))} / DESIGN ARCHIVE</p><h1>${esc(b.title)}</h1><p class="author">${esc(meta['作者']||b.author)}</p><p class="subtitle">${esc(b.subtitle)}</p></div><div class="detail-actions">${story ? `<a class="button" href="${story[0]}">${story[1]}</a>` : ''}<button class="button ${isSaved?'outline':''}" data-action="save" data-id="${b.id}" aria-pressed="${isSaved}">${svg(isSaved?'check':'plus')}<span>${isSaved?'已加入阅览台':'加入阅览台'}</span></button><a class="button outline" href="#desk">查看阅览台</a></div></div>
       <dl class="meta">${metaRows.map(([label,value])=>`<dt>${esc(label)}</dt><dd>${esc(value)}</dd>`).join('')}</dl>
       <section class="detail-section"><h2><span class="eyebrow">INTRODUCTION</span>内容简介</h2><div class="prose prose-preview" id="book-intro">${paragraphs(intro)}</div><button class="expand" data-action="expand-intro" aria-expanded="false" aria-controls="book-intro"><span>展开全文</span><span aria-hidden="true">＋</span></button></section>
       <section class="detail-section">${d.bio?.length?`<details><summary>作者介绍</summary><div class="prose">${paragraphs(d.bio)}</div></details>`:''}${d.contents?.length?`<details><summary>目录 <span class="tiny">${d.contents.length} 项</span></summary><div class="prose contents">${paragraphs(d.contents)}</div></details>`:''}${d.excerpts?.length?`<details><summary>原文摘录</summary><div class="prose">${d.excerpts.map(p=>`<blockquote class="quote">${esc(p)}</blockquote>`).join('')}</div></details>`:''}${d.reviews?.length?`<details><summary>书本简评与书评</summary><div class="prose">${d.reviews.map(p=>`<blockquote class="quote">${esc(p)}</blockquote>`).join('')}</div></details>`:''}</section>
@@ -201,7 +203,10 @@
     return `<div class="page-heading"><p class="eyebrow">YOUR READING DESK</p><div class="heading-line"><h1>阅览台</h1><span class="tiny">${number(list.length)} 本已保存</span></div><p class="desk-intro">把感兴趣的图书留在这里，<br>继续你的阅读。</p></div>${list.length?`<div class="desk-list">${list.map(b=>`<article class="desk-item"><a href="#detail/${b.id}" class="card-art" aria-label="打开 ${esc(b.title)}">${volume(b)}</a><div class="desk-info"><a href="#detail/${b.id}"><h2>${esc(b.title)}</h2></a><p>${esc(b.year)} · ${esc(b.author)}</p><a class="text-link" href="#detail/${b.id}">继续阅读 ${svg('chevron')}</a><button class="remove" data-action="remove" data-id="${b.id}" aria-label="移除 ${esc(b.title)}">移除</button></div></article>`).join('')}</div><p class="section-note">保存记录保留在当前浏览器。</p>`:`<div class="empty">${svg('desk')}<h2>留一本，下次读。</h2><p>在图书详情页点击「加入阅览台」，<br>就能在这里找到它。</p><a class="button" href="#library">浏览书库</a></div>`}${footer()}`;
   }
   function render(restore=false) {
-    const requested=location.hash.slice(1)||'home';
+    const [hash, params] = location.hash.slice(1).split('?');
+    const aliases = {search:'library', shelf:'desk'};
+    const requested = aliases[hash] || hash || 'home';
+    if (requested === 'library' && params) query = new URLSearchParams(params).get('q') || '';
     const showAbout=requested==='about';
     const previous=route;
     if(['home','library','desk'].includes(previous)&&requested.startsWith('detail/')) returnRoute=previous;
@@ -292,4 +297,12 @@
   window.addEventListener('scroll',()=>scrollPositions.set(route,scrollY),{passive:true});
   history.scrollRestoration='manual';
   render();
+  // The main site's portal embeds the library. Standalone previews use the ordinary link.
+  if (window.frameElement?.id === 'library') {
+    parent.postMessage({type:'drc:library-ready'}, '*');
+    document.querySelector('.sphere-link').addEventListener('click', event => {
+      event.preventDefault();
+      parent.postMessage({type:'drc:open-sphere'}, '*');
+    });
+  }
 })();
