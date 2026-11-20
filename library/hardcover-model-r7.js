@@ -94,7 +94,7 @@ mesh8=function(canvas,d){
   // The paper sits between the two boards. Their near/far order reverses
   // when viewed from behind. The spine is nearest only on the binding side.
   const frontNear=cosA*cosT>=0;
-  const spineNear=-sinA*cosT>0;
+  const spineNear=sinA*cosT>0; // The binding is on the negative X side.
   const layerOrder=[frontNear?0:2,1,frontNear?2:0,spineNear?3:-1];
   faces.sort((a,b)=>layerOrder[a.layer]-layerOrder[b.layer]||b.p.reduce((sum,p)=>sum+project(p)[2],0)-a.p.reduce((sum,p)=>sum+project(p)[2],0));
   function facing(f){
@@ -130,8 +130,19 @@ mesh8=function(canvas,d){
   }
   canvas.dataset.rendered='true';canvas.dataset.modelEdition='hardcover';canvas.dataset.faceCount=String(faces.length);
  }
- if(canvas.closest('.detail-object7')&&!canvas.dataset.rendered){
-  texture8(shelfAtlas7(d)).then(im=>{if(!canvas.dataset.rendered)paint(im);});
+ if(canvas.closest('.detail-object7')){
+  let detail=canvas._detailTexture;
+  if(!detail||detail.url!==texture){
+   detail={url:texture,image:null,paint};
+   canvas._detailTexture=detail;
+   texture8(texture).then(image=>{
+    detail.image=image;
+    if(canvas._detailTexture===detail)detail.paint(image);
+   });
+  }
+  detail.paint=paint;
+  if(detail.image){paint(detail.image);return;}
+  return texture8(shelfAtlas7(d)).then(preview=>{if(!detail.image)paint(preview);});
  }
  return texture8(texture).then(paint).catch(()=>{if(canvas.isConnected&&canvas._paintRevision===revision)canvas.parentElement.innerHTML=flat8(d);});
 };

@@ -2,7 +2,45 @@ const reading13={wendao:['知识与设计','沿着设计知识如何形成、传
 const oldDetails13=details7;
 details7=function(d){const r=reading13[d.id];return oldDetails13(d).replace('<section class="reveal7"><span>02 / 书目来源',`<section class="reveal7"><span>阅读导引</span><h2>${r[0]}</h2><p>${r[1]}</p><p>${r[2]}</p><small>本站编写的阅读建议，非原书目录或原文。</small></section><section class="reveal7"><span>02 / 书目来源`);};
 const oldBind13=bind7;
-bind7=function(){oldBind13();const c=document.querySelector('.detail-object7 canvas[data-model8]');if(!c)return;let p=null;c.style.touchAction='none';c.style.cursor='grab';c.onpointerdown=e=>{p=[e.clientX,e.clientY];c.setPointerCapture(e.pointerId);c.style.cursor='grabbing';};c.onpointermove=e=>{if(!p)return;c.dataset.angle=String(Number(c.dataset.angle||.3)+(e.clientX-p[0])*.012);c.dataset.tilt=String(Number(c.dataset.tilt||.025)+(e.clientY-p[1])*.008);p=[e.clientX,e.clientY];mesh8(c,doc(c.dataset.model8));};c.onpointerup=c.onpointercancel=()=>{p=null;c.style.cursor='grab';};};
+bind7=function(){
+ oldBind13();
+ const canvas=document.querySelector('.detail-object7 canvas[data-model8]');
+ if(!canvas)return;
+ let drag=null,rotated=false;
+ canvas.style.touchAction='none';
+ canvas.style.cursor='grab';
+ canvas.onpointerdown=event=>{
+  if(event.button!==0||!event.isPrimary||!canvas.closest('.detail-object7'))return;
+  rotated=false;
+  drag={id:event.pointerId,x:event.clientX,y:event.clientY,
+        angle:Number(canvas.dataset.angle||.3),tilt:Number(canvas.dataset.tilt||.025)};
+  canvas.setPointerCapture(event.pointerId);
+  canvas.style.cursor='grabbing';
+ };
+ canvas.onpointermove=event=>{
+  if(!drag||event.pointerId!==drag.id)return;
+  const dx=event.clientX-drag.x,dy=event.clientY-drag.y;
+  if(!rotated&&Math.hypot(dx,dy)<5)return;
+  rotated=true;
+  canvas.dataset.angle=String(drag.angle+dx*.012);
+  canvas.dataset.tilt=String(drag.tilt+dy*.008);
+  mesh8(canvas,doc(canvas.dataset.model8));
+ };
+ canvas.onpointerup=canvas.onpointercancel=canvas.onlostpointercapture=event=>{
+  if(!drag||event.pointerId!==drag.id)return;
+  drag=null;
+  canvas.style.cursor='grab';
+ };
+ // Pointer capture delivers a click to the canvas even after a drag.
+ // Consume that click before it reaches the reader on the parent book.
+ canvas.addEventListener('click',event=>{
+  if(rotated&&event.detail>0){
+   event.preventDefault();
+   event.stopPropagation();
+  }
+  rotated=false;
+ });
+};
 render7();
 
 // Preserve the cover aspect ratio and a deterministic front-to-back order.
